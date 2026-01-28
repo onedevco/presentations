@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Dividend & Salary Optimiser 2025/26</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useMemo, useEffect, useRef } = React;
+
+    // 2025/26 UK Tax Constants
+    const TAX_CONSTANTS = {
+      // Income Tax
+      personalAllowance: 12570,
+      basicRateLimit: 50270,
+      higherRateLimit: 125140,
+      basicRate: 0.20,
+      higherRate: 0.40,
+      additionalRate: 0.45,
+
+      // Dividend Tax (2025/26)
+      dividendAllowance: 500,
+      dividendBasicRate: 0.0875,
+      dividendHigherRate: 0.3375,
+      dividendAdditionalRate: 0.3935,
+
+      // Employee NI (Class 1 Primary)
+      niPrimaryThreshold: 12584,
+      niUpperEarningsLimit: 50284,
+      niMainRate: 0.08,
+      niUpperRate: 0.02,
+
+      // Employer NI (Class 1 Secondary)
+      niSecondaryThreshold: 5000,
+      employerNiRate: 0.15,
+
+      // Employment Allowance (not available for single director companies)
+      employmentAllowance: 10500,
+
+      // Pension
+      pensionAnnualAllowance: 60000,
+    };
+
+    // Calculate effective personal allowance (tapers above £100k)
+    const calculatePersonalAllowance = (totalIncome) => {
+      if (totalIncome <= 100000) return TAX_CONSTANTS.personalAllowance;
+      const reduction = Math.floor((totalIncome - 100000) / 2);
+      return Math.max(0, TAX_CONSTANTS.personalAllowance - reduction);
+    };
+
+    // Calculate income tax on salary
+    const calculateIncomeTax = (salary, pensionContribution = 0) => {
+      const adjustedSalary = Math.max(0, salary - pensionContribution);
+      const personalAllowance = calculatePersonalAllowance(adjustedSalary);
+
+      let tax = 0;
+
+      if (adjustedSalary > personalAllowance) {
+        const basicRateIncome = Math.min(adjustedSalary, TAX_CONSTANTS.basicRateLimit) - personalAllowance;
+        tax += Math.max(0, basicRateIncome) * TAX_CONSTANTS.basicRate;
+      }
+
+      if (adjustedSalary > TAX_CONSTANTS.basicRateLimit) {
+        const higherRateIncome = Math.min(adjustedSalary, TAX_CONSTANTS.higherRateLimit) - TAX_CONSTANTS.basicRateLimit;
+        tax += higherRateIncome * TAX_CONSTANTS.higherRate;
+      }
+
+      if (adjustedSalary > TAX_CONSTANTS.higherRateLimit) {
+        const additionalRateIncome = adjustedSalary - TAX_CONSTANTS.higherRateLimit;
+        tax += additionalRateIncome * TAX_CONSTANTS.additionalRate;
+      }
+
+      return tax;
+    };
+
+    // Calculate dividend tax
+    const calculateDividendTax = (dividend, salary, pensionContribution = 0) => {
+      const adjustedSalary = Math.max(0, salary - pensionContribution);
+      const totalIncome = adjustedSalary + dividend;
+      const personalAllowance = calculatePersonalAllowance(totalIncome);
+
+      const taxableDividend = Math.max(0, dividend - TAX_CONSTANTS.dividendAllowance);
+      if (taxableDividend === 0) return 0;
+
+      const salaryTaxable = Math.max(0, adjustedSalary - personalAllowance);
+      const basicBandRemaining = Math.max(0, TAX_CONSTANTS.basicRateLimit - TAX_CONSTANTS.personalAllowance - salaryTaxable);
+      const higherBandRemaining = TAX_CONSTANTS.higherRateLimit - TAX_CONSTANTS.basicRateLimit;
+
+      let tax = 0;
+      let remainingDividend = taxableDividend;
+
+      if (remainingDividend > 0 && basicBandRemaining > 0) {
+        const basicRateDividend = Math.min(remainingDividend, basicBandRemaining);
+        tax += basicRateDividend * TAX_CONSTANTS.dividendBasicRate;
+        remainingDividend -= basicRateDividend;
+      }
+
+      if (remainingDividend > 0) {
+        const incomeInHigherBand = Math.max(0, salaryTaxable - (TAX_CONSTANTS.basicRateLimit - TAX_CONSTANTS.personalAllowance));
+        const higherBandAvailable = Math.max(0, higherBandRemaining - incomeInHigherBand);
+        const higherRateDividend = Math.min(remainingDividend, higherBandAvailable);
+        tax += higherRateDividend * TAX_CONSTANTS.dividendHigherRate;
+        remainingDividend -= higherRateDividend;
+      }
+
+      if (remainingDividend > 0) {
+        tax += remainingDividend * TAX_CONSTANTS.dividendAdditionalRate;
+      }
+
+      return tax;
+    };
+
+    // Calculate employee NI
+    const calculateEmployeeNI = (salary) => {
+      if (salary <= TAX_CONSTANTS.niPrimaryThreshold) return 0;
+
+      let ni = 0;
+      const mainRateEarnings = Math.min(
+        Math.max(0, salary - TAX_CONSTANTS.niPrimaryThreshold),
+        TAX_CONSTANTS.niUpperEarningsLimit - TAX_CONSTANTS.niPrimaryThreshold
+      );
+      ni += mainRateEarnings * TAX_CONSTANTS.niMainRate;
+
+      if (salary > TAX_CONSTANTS.niUpperEarningsLimit) {
+        ni += (salary - TAX_CONSTANTS.niUpperEarningsLimit) * TAX_CONSTANTS.niUpperRate;
+      }
+
+      return ni;
+    };
+
+    // Calculate employer NI
+    const calculateEmployerNI = (salary, hasEmploymentAllowance = false) => {
+      if (salary <= TAX_CONSTANTS.niSecondaryThreshold) return 0;
+
+      let ni = (salary - TAX_CONSTANTS.niSecondaryThreshold) * TAX_CONSTANTS.employerNiRate;
+
+      if (hasEmploymentAllowance) {
+        ni = Math.max(0, ni - TAX_CONSTANTS.employmentAllowance);
+      }
+
+      return ni;
+    };
+
+    // Format currency
+    const formatCurrency = (amount) => {
+      return new Intl.NumberFormat('en-GB', {
+        style: 'currency',
+        currency: 'GBP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(amount);
+    };
+
+    // Format percentage
+    const formatPercent = (amount) => {
+      return `${(amount * 100).toFixed(1)}%`;
+    };
+
+    // Input component with proper number handling
+    const InputField = ({ label, value, onChange, min = 0, max, step = 1, helpText }) => {
+      const [displayValue, setDisplayValue] = useState(value.toString());
+
+      useEffect(() => {
+        setDisplayValue(value.toString());
+      }, [value]);
+
+      const handleChange = (e) => {
+        const newValue = e.target.value;
+        setDisplayValue(newValue);
+        const parsed = parseFloat(newValue);
+        if (!isNaN(parsed)) {
+          onChange(parsed);
+        }
+      };
+
+      const handleBlur = () => {
+        const parsed = parseFloat(displayValue);
+        if (isNaN(parsed) || displayValue === '') {
+          setDisplayValue('0');
+          onChange(0);
+        } else {
+          setDisplayValue(parsed.toString());
+        }
+      };
+
+      return (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={displayValue}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          {helpText && <p className="text-xs text-gray-500 mt-1">{helpText}</p>}
+        </div>
+      );
+    };
+
+    // Slider component
+    const SliderField = ({ label, value, onChange, min = 0, max, step = 100, formatValue }) => (
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-1">
+          <label className="text-sm font-medium text-gray-700">{label}</label>
+          <span className="text-sm font-semibold text-blue-600">{formatValue ? formatValue(value) : value}</span>
+        </div>
+        <input
+          type="range"
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          min={min}
+          max={max}
+          step={step}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+        />
+        <div className="flex justify-between text-xs text-gray-400 mt-1">
+          <span>{formatValue ? formatValue(min) : min}</span>
+          <span>{formatValue ? formatValue(max) : max}</span>
+        </div>
+      </div>
+    );
+
+    // Results card component
+    const ResultCard = ({ title, children, highlight = false }) => (
+      <div className={`p-4 rounded-lg ${highlight ? 'bg-green-50 border-2 border-green-500' : 'bg-gray-50 border border-gray-200'}`}>
+        <h4 className={`font-semibold mb-3 ${highlight ? 'text-green-700' : 'text-gray-700'}`}>{title}</h4>
+        {children}
+      </div>
+    );
+
+    // Row display component
+    const ResultRow = ({ label, value, highlight = false, indent = false }) => (
+      <div className={`flex justify-between py-1 ${indent ? 'pl-4 text-sm' : ''} ${highlight ? 'font-semibold text-green-700' : ''}`}>
+        <span className={highlight ? '' : 'text-gray-600'}>{label}</span>
+        <span className={highlight ? '' : 'text-gray-900'}>{value}</span>
+      </div>
+    );
+
+    // Person input section
+    const PersonSection = ({ title, person, onChange, shareholding, onShareholdingChange }) => (
+      <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">{title}</h3>
+
+        <InputField
+          label="Shareholding (%)"
+          value={shareholding}
+          onChange={onShareholdingChange}
+          min={0}
+          max={100}
+          step={1}
+          helpText="Percentage of company shares owned"
+        />
+
+        <InputField
+          label="Other Employment Income (£)"
+          value={person.otherIncome}
+          onChange={(v) => onChange({ ...person, otherIncome: v })}
+          helpText="Income from other jobs/sources"
+        />
+
+        <InputField
+          label="Personal Pension Contribution (£)"
+          value={person.pensionContribution}
+          onChange={(v) => onChange({ ...person, pensionContribution: v })}
+          max={TAX_CONSTANTS.pensionAnnualAllowance}
+          helpText={`Max £${TAX_CONSTANTS.pensionAnnualAllowance.toLocaleString()} annual allowance`}
+        />
+      </div>
+    );
+
+    // Person results section
+    const PersonResults = ({ name, salary, dividend, pension, otherIncome }) => {
+      const totalSalary = salary + otherIncome;
+      const incomeTax = calculateIncomeTax(totalSalary, pension);
+      const dividendTax = calculateDividendTax(dividend, totalSalary, pension);
+      const employeeNI = calculateEmployeeNI(totalSalary);
+      const employerNI = calculateEmployerNI(salary, false);
+
+      const totalTax = incomeTax + dividendTax + employeeNI;
+      const totalCostToCompany = salary + employerNI;
+      const netIncome = totalSalary + dividend - totalTax;
+      const effectiveRate = (totalSalary + dividend) > 0 ? totalTax / (totalSalary + dividend) : 0;
+
+      return (
+        <div className="space-y-4">
+          <ResultCard title={`${name} - Income`}>
+            <ResultRow label="Salary from company" value={formatCurrency(salary)} />
+            <ResultRow label="Other income" value={formatCurrency(otherIncome)} indent />
+            <ResultRow label="Total salary/employment" value={formatCurrency(totalSalary)} />
+            <ResultRow label="Dividends" value={formatCurrency(dividend)} />
+            <div className="border-t border-gray-300 my-2" />
+            <ResultRow label="Gross Income" value={formatCurrency(totalSalary + dividend)} highlight />
+          </ResultCard>
+
+          <ResultCard title={`${name} - Tax & NI`}>
+            <ResultRow label="Income Tax" value={formatCurrency(incomeTax)} />
+            <ResultRow label="Dividend Tax" value={formatCurrency(dividendTax)} />
+            <ResultRow label="Employee NI" value={formatCurrency(employeeNI)} />
+            <div className="border-t border-gray-300 my-2" />
+            <ResultRow label="Total Personal Tax" value={formatCurrency(totalTax)} highlight />
+            <ResultRow label="Effective Tax Rate" value={formatPercent(effectiveRate)} />
+          </ResultCard>
+
+          <ResultCard title={`${name} - Company Costs`}>
+            <ResultRow label="Salary" value={formatCurrency(salary)} />
+            <ResultRow label="Employer NI (15%)" value={formatCurrency(employerNI)} />
+            <div className="border-t border-gray-300 my-2" />
+            <ResultRow label="Total Cost to Company" value={formatCurrency(totalCostToCompany)} highlight />
+          </ResultCard>
+
+          <ResultCard title={`${name} - Take Home`} highlight>
+            <ResultRow label="Net Income" value={formatCurrency(netIncome)} highlight />
+          </ResultCard>
+        </div>
+      );
+    };
+
+    function DividendSalaryOptimiser() {
+      const [availableProfit, setAvailableProfit] = useState(100000);
+      const [person1Share, setPerson1Share] = useState(50);
+      const [person2Share, setPerson2Share] = useState(50);
+
+      const [person1, setPerson1] = useState({
+        otherIncome: 0,
+        pensionContribution: 0,
+      });
+
+      const [person2, setPerson2] = useState({
+        otherIncome: 0,
+        pensionContribution: 0,
+      });
+
+      const [salary1, setSalary1] = useState(12570);
+      const [salary2, setSalary2] = useState(12570);
+
+      const [viewMode, setViewMode] = useState('interactive');
+
+      // Animated optimisation state
+      const [isOptimising, setIsOptimising] = useState(false);
+      const [optimisationProgress, setOptimisationProgress] = useState(0);
+      const [bestFoundSoFar, setBestFoundSoFar] = useState(null);
+      const optimisationRef = useRef(null);
+
+      // Animated optimisation function
+      const runAnimatedOptimisation = () => {
+        setIsOptimising(true);
+        setOptimisationProgress(0);
+        setBestFoundSoFar(null);
+
+        const step = 2000;
+        const maxSal = Math.min(availableProfit / 2, 150000);
+        const totalSteps = Math.ceil(maxSal / step) * Math.ceil(maxSal / step);
+        let currentStep = 0;
+        let bestResult = null;
+        let bestNetIncome = -Infinity;
+
+        const salaryValues = [];
+        for (let s = 0; s <= maxSal; s += step) {
+          salaryValues.push(s);
+        }
+
+        let i = 0;
+        let j = 0;
+
+        const processStep = () => {
+          if (i >= salaryValues.length) {
+            setIsOptimising(false);
+            setOptimisationProgress(100);
+            if (bestResult) {
+              const refinedResult = refineOptimisation(
+                bestResult.salary1,
+                bestResult.salary2,
+                availableProfit,
+                person1Share,
+                person2Share,
+                person1,
+                person2
+              );
+              setBestFoundSoFar(refinedResult);
+              setSalary1(refinedResult.salary1);
+              setSalary2(refinedResult.salary2);
+            }
+            return;
+          }
+
+          const sal1 = salaryValues[i];
+          const sal2 = salaryValues[j];
+
+          setSalary1(sal1);
+          setSalary2(sal2);
+
+          const employerNI1 = calculateEmployerNI(sal1, false);
+          const employerNI2 = calculateEmployerNI(sal2, false);
+          const totalSalaryCost = sal1 + sal2 + employerNI1 + employerNI2;
+
+          if (totalSalaryCost <= availableProfit) {
+            const remainingForDividends = availableProfit - totalSalaryCost;
+            const dividend1 = remainingForDividends * (person1Share / 100);
+            const dividend2 = remainingForDividends * (person2Share / 100);
+
+            const totalSalary1 = sal1 + person1.otherIncome;
+            const incomeTax1 = calculateIncomeTax(totalSalary1, person1.pensionContribution);
+            const dividendTax1 = calculateDividendTax(dividend1, totalSalary1, person1.pensionContribution);
+            const employeeNI1 = calculateEmployeeNI(totalSalary1);
+            const net1 = totalSalary1 + dividend1 - incomeTax1 - dividendTax1 - employeeNI1;
+
+            const totalSalary2 = sal2 + person2.otherIncome;
+            const incomeTax2 = calculateIncomeTax(totalSalary2, person2.pensionContribution);
+            const dividendTax2 = calculateDividendTax(dividend2, totalSalary2, person2.pensionContribution);
+            const employeeNI2 = calculateEmployeeNI(totalSalary2);
+            const net2 = totalSalary2 + dividend2 - incomeTax2 - dividendTax2 - employeeNI2;
+
+            const totalNet = net1 + net2;
+
+            if (totalNet > bestNetIncome) {
+              bestNetIncome = totalNet;
+              bestResult = { salary1: sal1, salary2: sal2, dividend1, dividend2, employerNI1, employerNI2, net1, net2, totalNet };
+              setBestFoundSoFar(bestResult);
+            }
+          }
+
+          j++;
+          if (j >= salaryValues.length) {
+            j = 0;
+            i++;
+          }
+          currentStep++;
+          setOptimisationProgress(Math.round((currentStep / totalSteps) * 100));
+
+          optimisationRef.current = setTimeout(processStep, 30);
+        };
+
+        processStep();
+      };
+
+      // Refine around a given point with smaller steps
+      const refineOptimisation = (centerSal1, centerSal2, availableProfit, person1Share, person2Share, person1, person2) => {
+        let bestResult = null;
+        let bestNetIncome = -Infinity;
+
+        const range = 3000;
+        const step = 100;
+        const maxSalaryLimit = Math.min(availableProfit / 2, 150000);
+
+        for (let sal1 = Math.max(0, centerSal1 - range); sal1 <= Math.min(maxSalaryLimit, centerSal1 + range); sal1 += step) {
+          for (let sal2 = Math.max(0, centerSal2 - range); sal2 <= Math.min(maxSalaryLimit, centerSal2 + range); sal2 += step) {
+            const employerNI1 = calculateEmployerNI(sal1, false);
+            const employerNI2 = calculateEmployerNI(sal2, false);
+            const totalSalaryCost = sal1 + sal2 + employerNI1 + employerNI2;
+
+            if (totalSalaryCost > availableProfit) continue;
+
+            const remainingForDividends = availableProfit - totalSalaryCost;
+            const dividend1 = remainingForDividends * (person1Share / 100);
+            const dividend2 = remainingForDividends * (person2Share / 100);
+
+            const totalSalary1 = sal1 + person1.otherIncome;
+            const incomeTax1 = calculateIncomeTax(totalSalary1, person1.pensionContribution);
+            const dividendTax1 = calculateDividendTax(dividend1, totalSalary1, person1.pensionContribution);
+            const employeeNI1 = calculateEmployeeNI(totalSalary1);
+            const net1 = totalSalary1 + dividend1 - incomeTax1 - dividendTax1 - employeeNI1;
+
+            const totalSalary2 = sal2 + person2.otherIncome;
+            const incomeTax2 = calculateIncomeTax(totalSalary2, person2.pensionContribution);
+            const dividendTax2 = calculateDividendTax(dividend2, totalSalary2, person2.pensionContribution);
+            const employeeNI2 = calculateEmployeeNI(totalSalary2);
+            const net2 = totalSalary2 + dividend2 - incomeTax2 - dividendTax2 - employeeNI2;
+
+            const totalNet = net1 + net2;
+
+            if (totalNet > bestNetIncome) {
+              bestNetIncome = totalNet;
+              bestResult = { salary1: sal1, salary2: sal2, dividend1, dividend2, employerNI1, employerNI2, net1, net2, totalNet };
+            }
+          }
+        }
+
+        return bestResult;
+      };
+
+      const stopOptimisation = () => {
+        if (optimisationRef.current) {
+          clearTimeout(optimisationRef.current);
+        }
+        setIsOptimising(false);
+      };
+
+      useEffect(() => {
+        return () => {
+          if (optimisationRef.current) {
+            clearTimeout(optimisationRef.current);
+          }
+        };
+      }, []);
+
+      const handleShare1Change = (value) => {
+        const newValue = Math.min(100, Math.max(0, value));
+        setPerson1Share(newValue);
+        setPerson2Share(100 - newValue);
+      };
+
+      const calculations = useMemo(() => {
+        const employerNI1 = calculateEmployerNI(salary1, false);
+        const employerNI2 = calculateEmployerNI(salary2, false);
+        const totalSalaryCost = salary1 + salary2 + employerNI1 + employerNI2;
+        const remainingForDividends = Math.max(0, availableProfit - totalSalaryCost);
+
+        const dividend1 = remainingForDividends * (person1Share / 100);
+        const dividend2 = remainingForDividends * (person2Share / 100);
+
+        const totalSalary1 = salary1 + person1.otherIncome;
+        const incomeTax1 = calculateIncomeTax(totalSalary1, person1.pensionContribution);
+        const dividendTax1 = calculateDividendTax(dividend1, totalSalary1, person1.pensionContribution);
+        const employeeNI1 = calculateEmployeeNI(totalSalary1);
+        const totalTax1 = incomeTax1 + dividendTax1 + employeeNI1;
+        const net1 = totalSalary1 + dividend1 - totalTax1;
+
+        const totalSalary2 = salary2 + person2.otherIncome;
+        const incomeTax2 = calculateIncomeTax(totalSalary2, person2.pensionContribution);
+        const dividendTax2 = calculateDividendTax(dividend2, totalSalary2, person2.pensionContribution);
+        const employeeNI2 = calculateEmployeeNI(totalSalary2);
+        const totalTax2 = incomeTax2 + dividendTax2 + employeeNI2;
+        const net2 = totalSalary2 + dividend2 - totalTax2;
+
+        return {
+          employerNI1,
+          employerNI2,
+          totalSalaryCost,
+          remainingForDividends,
+          dividend1,
+          dividend2,
+          totalTax1,
+          totalTax2,
+          net1,
+          net2,
+          totalNet: net1 + net2,
+          totalTax: totalTax1 + totalTax2 + employerNI1 + employerNI2,
+        };
+      }, [salary1, salary2, availableProfit, person1Share, person2Share, person1, person2]);
+
+      const maxSalary = Math.min(availableProfit / 2, 150000);
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                UK Dividend & Salary Optimiser
+              </h1>
+              <p className="text-gray-600">Tax Year 2025/26 • Joint Optimisation</p>
+            </div>
+
+            {/* Tax Year Info Banner */}
+            <div className="bg-blue-600 text-white p-4 rounded-lg mb-6 text-sm">
+              <div className="flex flex-wrap gap-4 justify-center">
+                <span>📊 Personal Allowance: £12,570</span>
+                <span>💷 Basic Rate: 20% (to £50,270)</span>
+                <span>📈 Higher Rate: 40%</span>
+                <span>🏢 Employer NI: 15% (from £5,000)</span>
+                <span>💰 Dividend Allowance: £500</span>
+              </div>
+            </div>
+
+            {/* Input Section */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {/* Company Inputs */}
+              <div className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Company</h3>
+                <InputField
+                  label="Available Profit (after Corporation Tax) £"
+                  value={availableProfit}
+                  onChange={setAvailableProfit}
+                  min={0}
+                  step={1000}
+                  helpText="Profits available to extract"
+                />
+              </div>
+
+              {/* Person 1 */}
+              <PersonSection
+                title="You"
+                person={person1}
+                onChange={setPerson1}
+                shareholding={person1Share}
+                onShareholdingChange={handleShare1Change}
+              />
+
+              {/* Person 2 */}
+              <PersonSection
+                title="Your Wife"
+                person={person2}
+                onChange={setPerson2}
+                shareholding={person2Share}
+                onShareholdingChange={(v) => handleShare1Change(100 - v)}
+              />
+            </div>
+
+            {/* Interactive Sliders */}
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Adjust Salary Split</h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                <SliderField
+                  label="Your Salary"
+                  value={salary1}
+                  onChange={setSalary1}
+                  min={0}
+                  max={maxSalary}
+                  step={500}
+                  formatValue={formatCurrency}
+                />
+                <SliderField
+                  label="Wife's Salary"
+                  value={salary2}
+                  onChange={setSalary2}
+                  min={0}
+                  max={maxSalary}
+                  step={500}
+                  formatValue={formatCurrency}
+                />
+              </div>
+
+              {/* Quick presets and Find Optimal button */}
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="text-sm text-gray-500 mr-2">Quick presets:</span>
+                <button
+                  onClick={() => { setSalary1(12570); setSalary2(12570); }}
+                  className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full"
+                  disabled={isOptimising}
+                >
+                  Personal Allowance Only
+                </button>
+                <button
+                  onClick={() => { setSalary1(9100); setSalary2(9100); }}
+                  className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full"
+                  disabled={isOptimising}
+                >
+                  Below Old NI Threshold
+                </button>
+                <button
+                  onClick={() => { setSalary1(50270); setSalary2(50270); }}
+                  className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-full"
+                  disabled={isOptimising}
+                >
+                  Basic Rate Limit
+                </button>
+
+                <div className="ml-auto">
+                  {!isOptimising ? (
+                    <button
+                      onClick={runAnimatedOptimisation}
+                      className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:from-purple-700 hover:to-indigo-700 shadow-md transition-all flex items-center gap-2"
+                    >
+                      <span>🔍</span> Find Optimal Split
+                    </button>
+                  ) : (
+                    <button
+                      onClick={stopOptimisation}
+                      className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 shadow-md transition-all flex items-center gap-2"
+                    >
+                      <span>⏹</span> Stop
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Optimisation Progress */}
+              {isOptimising && (
+                <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-purple-700">Searching for optimal split...</span>
+                    <span className="text-sm text-purple-600">{optimisationProgress}%</span>
+                  </div>
+                  <div className="w-full bg-purple-200 rounded-full h-2">
+                    <div
+                      className="bg-purple-600 h-2 rounded-full transition-all duration-100"
+                      style={{ width: `${optimisationProgress}%` }}
+                    />
+                  </div>
+                  {bestFoundSoFar && (
+                    <div className="mt-3 text-sm text-purple-700">
+                      Best found so far: <strong>{formatCurrency(bestFoundSoFar.totalNet)}</strong>
+                      <span className="text-purple-500 ml-2">
+                        (You: {formatCurrency(bestFoundSoFar.salary1)} / Wife: {formatCurrency(bestFoundSoFar.salary2)})
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Optimisation Complete */}
+              {!isOptimising && bestFoundSoFar && optimisationProgress === 100 && (
+                <div className="mt-4 p-4 bg-green-50 border-2 border-green-500 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-green-600 text-lg">✓</span>
+                    <span className="font-semibold text-green-700">Optimal Split Found!</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-500">Your Salary</p>
+                      <p className="font-bold text-gray-900">{formatCurrency(bestFoundSoFar.salary1)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Wife's Salary</p>
+                      <p className="font-bold text-gray-900">{formatCurrency(bestFoundSoFar.salary2)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Combined Take Home</p>
+                      <p className="font-bold text-green-700">{formatCurrency(bestFoundSoFar.totalNet)}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Summary Cards */}
+            <div className="grid md:grid-cols-4 gap-4 mb-8">
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+                <p className="text-sm text-gray-500">Total Salaries</p>
+                <p className="text-2xl font-bold text-gray-900">{formatCurrency(salary1 + salary2)}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+                <p className="text-sm text-gray-500">Employer NI Cost</p>
+                <p className="text-2xl font-bold text-red-600">{formatCurrency(calculations.employerNI1 + calculations.employerNI2)}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+                <p className="text-sm text-gray-500">Total Dividends</p>
+                <p className="text-2xl font-bold text-blue-600">{formatCurrency(calculations.remainingForDividends)}</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg shadow-sm border-2 border-green-500 text-center">
+                <p className="text-sm text-green-600">Combined Take Home</p>
+                <p className="text-2xl font-bold text-green-700">{formatCurrency(calculations.totalNet)}</p>
+              </div>
+            </div>
+
+            {/* Detailed Results */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Your Breakdown</h3>
+                <PersonResults
+                  name="You"
+                  salary={salary1}
+                  dividend={calculations.dividend1}
+                  pension={person1.pensionContribution}
+                  otherIncome={person1.otherIncome}
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Wife's Breakdown</h3>
+                <PersonResults
+                  name="Wife"
+                  salary={salary2}
+                  dividend={calculations.dividend2}
+                  pension={person2.pensionContribution}
+                  otherIncome={person2.otherIncome}
+                />
+              </div>
+            </div>
+
+            {/* Disclaimer */}
+            <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+              <p className="font-semibold mb-1">⚠️ Disclaimer</p>
+              <p>
+                This calculator provides estimates based on 2025/26 UK tax rates and is for informational purposes only.
+                It does not constitute financial advice. Tax situations can be complex and individual circumstances vary.
+                Please consult a qualified accountant or tax advisor for personalised advice.
+                Employment Allowance is not available for companies with a single director as the only employee paid above the NI threshold.
+              </p>
+            </div>
+
+            {/* Tax rates reference */}
+            <details className="mt-4">
+              <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+                View 2025/26 Tax Rates Reference
+              </summary>
+              <div className="mt-2 p-4 bg-gray-50 rounded-lg text-sm grid md:grid-cols-3 gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Income Tax</h4>
+                  <p>Personal Allowance: £12,570</p>
+                  <p>Basic Rate (20%): £12,571 - £50,270</p>
+                  <p>Higher Rate (40%): £50,271 - £125,140</p>
+                  <p>Additional Rate (45%): Over £125,140</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Dividend Tax</h4>
+                  <p>Allowance: £500</p>
+                  <p>Basic Rate: 8.75%</p>
+                  <p>Higher Rate: 33.75%</p>
+                  <p>Additional Rate: 39.35%</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">National Insurance</h4>
+                  <p>Employee: 8% (£12,584-£50,284), 2% above</p>
+                  <p>Employer: 15% above £5,000</p>
+                  <p>Employment Allowance: £10,500*</p>
+                  <p className="text-xs mt-1">*Not for single director companies</p>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<DividendSalaryOptimiser />);
+  </script>
+</body>
+</html>
