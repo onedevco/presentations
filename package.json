@@ -1,0 +1,24 @@
+{
+  "name": "presentations",
+  "version": "1.0.0",
+  "main": "build-jsx.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onedevco/presentations.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onedevco/presentations/issues"
+  },
+  "homepage": "https://github.com/onedevco/presentations#readme",
+  "description": "",
+  "dependencies": {
+    "@babel/core": "^7.28.6",
+    "@babel/preset-react": "^7.28.5",
+    "lucide-react": "^0.563.0"
+  }
+}

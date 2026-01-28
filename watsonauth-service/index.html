@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watson Auth Service — Developer Overview</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #fb923c;
+    --danger: #f87171;
+    --code-bg: #0d1117;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+  }
+  .slide {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    height: 100vh;
+    animation: fadeIn 0.3s ease;
+  }
+  .slide.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  h1 { font-size: 3rem; font-weight: 800; margin-bottom: 16px; letter-spacing: -1px; }
+  h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.5px; }
+  h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 12px; color: var(--accent); }
+  p, li { font-size: 1.15rem; line-height: 1.7; color: var(--muted); }
+  ul { list-style: none; padding: 0; }
+  ul li { padding: 6px 0; }
+  ul li::before { content: "→ "; color: var(--accent); font-weight: 600; }
+
+  .subtitle { font-size: 1.4rem; color: var(--muted); margin-bottom: 32px; }
+  .tag {
+    display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.85rem;
+    font-weight: 600; margin: 4px; border: 1px solid var(--border);
+  }
+  .tag-blue { color: var(--accent); border-color: var(--accent); }
+  .tag-purple { color: var(--accent2); border-color: var(--accent2); }
+  .tag-green { color: var(--accent3); border-color: var(--accent3); }
+  .tag-orange { color: var(--accent4); border-color: var(--accent4); }
+
+  .grid { display: grid; gap: 24px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+  }
+  .card h3 { margin-top: 0; }
+  .card p { font-size: 1rem; }
+
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; overflow-x: auto; font-size: 0.9rem; line-height: 1.6;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  code { color: var(--accent3); }
+  .kw { color: var(--accent2); }
+  .str { color: var(--accent3); }
+  .comment { color: #6b7280; font-style: italic; }
+  .fn { color: var(--accent); }
+  .num { color: var(--accent4); }
+
+  .flow-step {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 12px;
+  }
+  .flow-num {
+    background: var(--accent); color: var(--bg); width: 32px; height: 32px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+  }
+  .flow-step p { font-size: 1rem; margin: 0; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th { text-align: left; padding: 10px 16px; border-bottom: 2px solid var(--border); color: var(--accent); font-weight: 600; }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  td:first-child { color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+
+  .nav {
+    position: fixed; bottom: 30px; right: 40px; display: flex; gap: 12px; align-items: center; z-index: 10;
+  }
+  .nav button {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+    transition: background 0.2s;
+  }
+  .nav button:hover { background: var(--border); }
+  .nav span { color: var(--muted); font-size: 0.85rem; }
+
+  .security-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+  .security-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+  .highlight { color: var(--accent); font-weight: 600; }
+
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .cols-2-wide { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
+
+  .tree { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.8; color: var(--muted); }
+  .tree .dir { color: var(--accent); font-weight: 600; }
+  .tree .file { color: var(--text); }
+  .tree .note { color: var(--accent4); }
+</style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide active" id="s1">
+  <h1>Watson Auth Service</h1>
+  <p class="subtitle">A self-hosted centralised authentication service for multi-app identity management</p>
+  <div style="margin-top: 24px;">
+    <span class="tag tag-blue">Next.js 16</span>
+    <span class="tag tag-purple">Prisma 7</span>
+    <span class="tag tag-green">PostgreSQL</span>
+    <span class="tag tag-orange">RS256 JWTs</span>
+    <span class="tag tag-blue">Argon2id</span>
+    <span class="tag tag-purple">Resend</span>
+    <span class="tag tag-green">Zod</span>
+    <span class="tag tag-orange">shadcn/ui</span>
+  </div>
+  <p style="margin-top: 40px; font-size: 0.95rem;">Use <strong style="color:var(--text);">arrow keys</strong> or click the buttons to navigate.</p>
+</div>
+
+<!-- Slide 2: Core Concepts -->
+<div class="slide" id="s2">
+  <h2>Core Concepts</h2>
+  <div class="grid grid-3" style="margin-top: 8px;">
+    <div class="card">
+      <h3>Users</h3>
+      <p>Central identity. A user exists once and can be granted access to multiple applications. Includes email, password hash, admin flag, and disabled state.</p>
+    </div>
+    <div class="card">
+      <h3>Apps</h3>
+      <p>Registered applications that use Watson Auth. Each has a unique slug, allowed origins, callback URLs, and an optional invite-only mode.</p>
+    </div>
+    <div class="card">
+      <h3>UserAppAccess</h3>
+      <p>Explicit grants connecting users to apps. A user does <em>not</em> automatically get access to all apps — access must be granted.</p>
+    </div>
+    <div class="card">
+      <h3>Sessions</h3>
+      <p>Server-side records tied to refresh tokens. Support rotation and family-based revocation to detect token reuse attacks.</p>
+    </div>
+    <div class="card">
+      <h3>Organisations</h3>
+      <p>Optional grouping of users with roles: owner, admin, member. Supports invites. (Future enhancement.)</p>
+    </div>
+    <div class="card">
+      <h3>Audit Logs</h3>
+      <p>Every significant auth event is logged with userId, appId, action type, IP address, user agent, and metadata.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3: Project Structure -->
+<div class="slide" id="s3">
+  <h2>Project Structure</h2>
+  <div class="cols-2">
+    <div class="tree">
+      <pre style="background:transparent;border:none;padding:0;font-size:0.85rem;line-height:1.8;">
+<span class="dir">app/</span>
+├── <span class="dir">(auth)/</span>          <span class="note"># Hosted login, register, etc.</span>
+│   ├── login/
+│   ├── register/
+│   ├── forgot-password/
+│   ├── reset-password/
+│   └── verify-email/
+├── <span class="dir">(admin)/</span>         <span class="note"># Admin dashboard</span>
+│   ├── dashboard/
+│   ├── users/
+│   ├── apps/
+│   ├── sessions/
+│   └── audit-logs/
+├── <span class="dir">api/</span>
+│   ├── <span class="dir">auth/</span>        <span class="note"># Public auth endpoints</span>
+│   └── <span class="dir">admin/</span>       <span class="note"># Admin API endpoints</span>
+└── <span class="dir">.well-known/</span>     <span class="note"># JWKS endpoint</span></pre>
+    </div>
+    <div class="tree">
+      <pre style="background:transparent;border:none;padding:0;font-size:0.85rem;line-height:1.8;">
+<span class="dir">lib/</span>
+├── <span class="file">db.ts</span>           <span class="note"># Prisma client (PrismaPg adapter)</span>
+├── <span class="file">jwt.ts</span>          <span class="note"># Sign/verify, JWKS export</span>
+├── <span class="file">password.ts</span>     <span class="note"># Argon2id hash/verify</span>
+├── <span class="file">email.ts</span>        <span class="note"># Resend integration</span>
+├── <span class="file">tokens.ts</span>       <span class="note"># Secure token generation</span>
+├── <span class="file">audit.ts</span>        <span class="note"># Audit logging helpers</span>
+├── <span class="file">admin-auth.ts</span>   <span class="note"># Admin middleware</span>
+└── <span class="dir">validations/</span>
+    └── <span class="file">auth.ts</span>     <span class="note"># Zod schemas</span>
+
+<span class="dir">prisma/</span>
+└── <span class="file">schema.prisma</span>   <span class="note"># Database schema</span>
+
+<span class="dir">components/ui/</span>     <span class="note"># shadcn/ui components</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4: Database Schema -->
+<div class="slide" id="s4">
+  <h2>Database Schema</h2>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>User</h3>
+      <p><code>id</code> <code>email</code> <code>passwordHash</code> <code>name?</code> <code>emailVerified</code> <code>disabled</code> <code>isAdmin</code></p>
+      <p style="margin-top:8px;">Central identity. Has many: appAccess, sessions, tokens, auditLogs, orgMemberships</p>
+    </div>
+    <div class="card">
+      <h3>App</h3>
+      <p><code>id</code> <code>name</code> <code>slug</code> <code>allowedOrigins[]</code> <code>callbackUrls[]</code> <code>inviteOnly</code></p>
+      <p style="margin-top:8px;">Each registered application. Slug is unique and used in API calls.</p>
+    </div>
+    <div class="card">
+      <h3>Session</h3>
+      <p><code>id</code> <code>userId</code> <code>appId</code> <code>tokenHash</code> <code>familyId</code> <code>expiresAt</code> <code>revokedAt</code></p>
+      <p style="margin-top:8px;">Server-side refresh token record. tokenHash is SHA-256 of the JWT. familyId tracks rotation chains.</p>
+    </div>
+    <div class="card">
+      <h3>AuditLog</h3>
+      <p><code>id</code> <code>userId?</code> <code>appId?</code> <code>action</code> <code>ipAddress</code> <code>userAgent</code> <code>metadata</code></p>
+      <p style="margin-top:8px;">Immutable log of all auth events. 16+ action types tracked.</p>
+    </div>
+    <div class="card">
+      <h3>UserAppAccess</h3>
+      <p><code>userId</code> + <code>appId</code> (composite unique)</p>
+      <p style="margin-top:8px;">Explicit access grant. Users must be given access to each app.</p>
+    </div>
+    <div class="card">
+      <h3>Supporting Models</h3>
+      <p><code>EmailVerificationToken</code> <code>PasswordResetToken</code> <code>Invite</code> <code>Organisation</code> <code>OrganisationMember</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: Authentication Flow -->
+<div class="slide" id="s5">
+  <h2>Authentication Flow</h2>
+  <div class="cols-2-wide">
+    <div>
+      <div class="flow-step"><div class="flow-num">1</div><p>User logs in via hosted page or API with <code>email</code>, <code>password</code>, <code>appSlug</code></p></div>
+      <div class="flow-step"><div class="flow-num">2</div><p>Server validates credentials, checks app access, creates a <strong>Session</strong> record</p></div>
+      <div class="flow-step"><div class="flow-num">3</div><p>Returns short-lived <span class="highlight">access token</span> (JWT, 15min default) + sets <span class="highlight">refresh token</span> as httpOnly cookie (30 days)</p></div>
+      <div class="flow-step"><div class="flow-num">4</div><p>Client uses access token in <code>Authorization: Bearer</code> header for API requests</p></div>
+      <div class="flow-step"><div class="flow-num">5</div><p>When access token expires, client calls <code>POST /api/auth/refresh</code> to get new tokens</p></div>
+      <div class="flow-step"><div class="flow-num">6</div><p>Refresh tokens <strong>rotate on each use</strong> — the old token is invalidated immediately</p></div>
+    </div>
+    <div>
+      <h3>Token Payloads</h3>
+      <pre><code><span class="comment">// Access Token (stateless)</span>
+{
+  <span class="str">"sub"</span>: <span class="str">"user-id"</span>,
+  <span class="str">"email"</span>: <span class="str">"user@example.com"</span>,
+  <span class="str">"name"</span>: <span class="str">"Jane Doe"</span>,
+  <span class="str">"appId"</span>: <span class="str">"app-id"</span>,
+  <span class="str">"appSlug"</span>: <span class="str">"my-app"</span>
+}
+
+<span class="comment">// Refresh Token (validated server-side)</span>
+{
+  <span class="str">"sub"</span>: <span class="str">"user-id"</span>,
+  <span class="str">"sessionId"</span>: <span class="str">"session-id"</span>,
+  <span class="str">"appId"</span>: <span class="str">"app-id"</span>,
+  <span class="str">"familyId"</span>: <span class="str">"family-id"</span>
+}</code></pre>
+      <div style="margin-top: 16px;">
+        <h3>JWKS Endpoint</h3>
+        <p style="font-size:0.95rem;">Client apps validate access tokens using the public key from <code>GET /.well-known/jwks.json</code> — no shared secret needed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 6: Token Rotation & Security -->
+<div class="slide" id="s6">
+  <h2>Token Rotation & Reuse Detection</h2>
+  <div class="cols-2" style="align-items: start;">
+    <div>
+      <h3>How Rotation Works</h3>
+      <div class="flow-step"><div class="flow-num">1</div><p>Login creates a session with a <code>familyId</code> and stores the <code>tokenHash</code></p></div>
+      <div class="flow-step"><div class="flow-num">2</div><p>On refresh, the session's <code>tokenHash</code> is updated to the new token's hash</p></div>
+      <div class="flow-step"><div class="flow-num">3</div><p>The old refresh token is now invalid (its hash no longer matches any session)</p></div>
+      <div style="margin-top: 20px;">
+        <h3 style="color: var(--danger);">Suspicious Reuse Detection</h3>
+        <div class="flow-step" style="border-color: var(--danger);">
+          <div class="flow-num" style="background: var(--danger);">!</div>
+          <p>If a used token is presented again, <strong>all sessions in the family are revoked</strong>. This indicates the token was stolen.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>Security Measures</h3>
+      <div class="security-item"><span class="security-icon">&#x1f512;</span><p><strong>Argon2id</strong> password hashing with OWASP-recommended settings (19 MiB memory, 2 iterations)</p></div>
+      <div class="security-item"><span class="security-icon">&#x1f511;</span><p><strong>RS256</strong> asymmetric JWT signing — public key is safe to share via JWKS</p></div>
+      <div class="security-item"><span class="security-icon">&#x1f36a;</span><p><strong>httpOnly + Secure</strong> cookies for refresh tokens — no JS access</p></div>
+      <div class="security-item"><span class="security-icon">&#x1f6e1;</span><p><strong>Email enumeration prevention</strong> — forgot-password always returns the same response</p></div>
+      <div class="security-item"><span class="security-icon">&#x23f1;</span><p><strong>Constant-time</strong> password comparison to prevent timing attacks</p></div>
+      <div class="security-item"><span class="security-icon">&#x1f4dd;</span><p><strong>Full audit trail</strong> — 16+ event types logged with IP, user agent, metadata</p></div>
+      <div class="security-item"><span class="security-icon">&#x26a0;</span><p><strong>Password reset</strong> invalidates all existing sessions</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7: API Endpoints -->
+<div class="slide" id="s7">
+  <h2>API Endpoints</h2>
+  <div class="cols-2">
+    <div>
+      <h3>Public Auth API</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Endpoint</th><th>Purpose</th></tr>
+          <tr><td>POST /api/auth/register</td><td>Create account + grant app access</td></tr>
+          <tr><td>POST /api/auth/login</td><td>Authenticate + issue tokens</td></tr>
+          <tr><td>POST /api/auth/logout</td><td>Revoke session</td></tr>
+          <tr><td>POST /api/auth/refresh</td><td>Rotate tokens</td></tr>
+          <tr><td>POST /api/auth/verify-email</td><td>Confirm email address</td></tr>
+          <tr><td>POST /api/auth/forgot-password</td><td>Request password reset</td></tr>
+          <tr><td>POST /api/auth/reset-password</td><td>Set new password</td></tr>
+          <tr><td>GET /.well-known/jwks.json</td><td>Public key for JWT verification</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h3>Admin API</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Endpoint</th><th>Purpose</th></tr>
+          <tr><td>POST /api/admin/login</td><td>Admin authentication</td></tr>
+          <tr><td>GET /api/admin/stats</td><td>Dashboard statistics</td></tr>
+          <tr><td>GET /api/admin/users</td><td>List users (paginated)</td></tr>
+          <tr><td>PATCH /api/admin/users/[id]</td><td>Update user</td></tr>
+          <tr><td>GET|POST /api/admin/apps</td><td>List / create apps</td></tr>
+          <tr><td>PATCH|DELETE /api/admin/apps/[id]</td><td>Update / delete app</td></tr>
+          <tr><td>GET /api/admin/sessions</td><td>List active sessions</td></tr>
+          <tr><td>DELETE /api/admin/sessions/[id]</td><td>Revoke session</td></tr>
+          <tr><td>GET /api/admin/audit-logs</td><td>Query audit logs</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 8: API Response Format -->
+<div class="slide" id="s8">
+  <h2>API Conventions</h2>
+  <div class="cols-2">
+    <div>
+      <h3>Response Format</h3>
+      <pre><code><span class="comment">// Success (200/201)</span>
+{
+  <span class="str">"accessToken"</span>: <span class="str">"eyJhbG..."</span>,
+  <span class="str">"expiresIn"</span>: <span class="num">900</span>,
+  <span class="str">"user"</span>: { <span class="str">"id"</span>, <span class="str">"email"</span>, <span class="str">"name"</span> }
+}
+
+<span class="comment">// Error (4xx)</span>
+{
+  <span class="str">"error"</span>: <span class="str">"invalid_credentials"</span>,
+  <span class="str">"message"</span>: <span class="str">"Invalid email or password"</span>
+}
+
+<span class="comment">// Validation error (400)</span>
+{
+  <span class="str">"error"</span>: <span class="str">"validation_error"</span>,
+  <span class="str">"details"</span>: { ... } <span class="comment">// Zod flatten</span>
+}</code></pre>
+    </div>
+    <div>
+      <h3>Error Codes</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Code</th><th>Meaning</th></tr>
+          <tr><td>validation_error</td><td>Invalid input (includes Zod details)</td></tr>
+          <tr><td>invalid_credentials</td><td>Wrong email or password</td></tr>
+          <tr><td>account_disabled</td><td>User account is disabled</td></tr>
+          <tr><td>no_app_access</td><td>User lacks access to this app</td></tr>
+          <tr><td>app_not_found</td><td>App slug doesn't exist</td></tr>
+          <tr><td>invite_required</td><td>App is invite-only</td></tr>
+          <tr><td>token_expired</td><td>Token has expired</td></tr>
+          <tr><td>server_error</td><td>Unexpected error</td></tr>
+        </table>
+      </div>
+      <h3 style="margin-top: 20px;">Validation</h3>
+      <p style="font-size: 0.95rem;">All inputs validated with <strong>Zod</strong> schemas. Emails are lowercased + trimmed. Passwords must be 8-128 chars.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Hosted Pages & Admin Dashboard -->
+<div class="slide" id="s9">
+  <h2>Hosted Pages & Admin Dashboard</h2>
+  <div class="cols-2">
+    <div>
+      <h3>Hosted Auth Pages</h3>
+      <p style="margin-bottom: 16px;">Users interact with these pages directly. Each takes an <code>app</code> query parameter (slug).</p>
+      <ul>
+        <li><code>/login?app=my-app</code> — Login form</li>
+        <li><code>/register?app=my-app</code> — Registration form</li>
+        <li><code>/forgot-password?app=my-app</code> — Request password reset</li>
+        <li><code>/reset-password?token=...</code> — Set new password</li>
+        <li><code>/verify-email?token=...</code> — Confirm email</li>
+      </ul>
+      <p style="margin-top: 16px;">Built with <strong>shadcn/ui</strong> components (Button, Input, Card, Label, Alert). Styled with Tailwind CSS.</p>
+    </div>
+    <div>
+      <h3>Admin Dashboard</h3>
+      <p style="margin-bottom: 16px;">Protected by admin auth middleware. Requires <code>isAdmin: true</code> on the User record.</p>
+      <ul>
+        <li><strong>Dashboard</strong> — Total users, apps, active sessions, login activity chart</li>
+        <li><strong>Users</strong> — Search, enable/disable accounts, toggle admin, manage app access</li>
+        <li><strong>Apps</strong> — Create, edit, delete registered applications</li>
+        <li><strong>Sessions</strong> — View and revoke active sessions</li>
+        <li><strong>Audit Logs</strong> — Filter by action type, view event details</li>
+      </ul>
+      <p style="margin-top: 16px;">Admin uses its own token pair stored in <code>watson_admin_token</code> and <code>watson_admin_refresh</code> cookies.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Key Library Files -->
+<div class="slide" id="s10">
+  <h2>Key Library Files</h2>
+  <div class="grid grid-3">
+    <div class="card">
+      <h3>lib/jwt.ts</h3>
+      <p><code>signAccessToken()</code> / <code>signRefreshToken()</code> — RS256 JWTs using <strong>jose</strong>.</p>
+      <p style="margin-top:8px;"><code>verifyAccessToken()</code> / <code>verifyRefreshToken()</code> — Validates signature + issuer.</p>
+      <p style="margin-top:8px;"><code>getJWKS()</code> — Exports public key in JWKS format.</p>
+    </div>
+    <div class="card">
+      <h3>lib/password.ts</h3>
+      <p><code>hashPassword()</code> — Argon2id, 19 MiB memory, 2 iterations, 1 parallelism.</p>
+      <p style="margin-top:8px;"><code>verifyPassword()</code> — Constant-time comparison.</p>
+    </div>
+    <div class="card">
+      <h3>lib/email.ts</h3>
+      <p>Uses <strong>Resend</strong> to send verification emails (24hr), password reset emails (1hr), and welcome emails.</p>
+    </div>
+    <div class="card">
+      <h3>lib/tokens.ts</h3>
+      <p><code>generateSecureToken()</code> — Crypto-random base64url token.</p>
+      <p style="margin-top:8px;"><code>hashToken()</code> — SHA-256 for storage. <code>generateFamilyId()</code> — Rotation tracking.</p>
+    </div>
+    <div class="card">
+      <h3>lib/audit.ts</h3>
+      <p><code>createAuditLog()</code> — Logs auth events with userId, appId, action, IP, userAgent.</p>
+      <p style="margin-top:8px;">16+ action types: register, login, logout, token_refresh, suspicious_token_reuse, etc.</p>
+    </div>
+    <div class="card">
+      <h3>lib/admin-auth.ts</h3>
+      <p><code>requireAdminAccess()</code> — Middleware that verifies admin JWT and returns user or error response.</p>
+      <p style="margin-top:8px;">Uses internal app slug <code>_watson_admin</code> for admin sessions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 11: Getting Started -->
+<div class="slide" id="s11">
+  <h2>Getting Started</h2>
+  <div class="cols-2-wide">
+    <div>
+      <h3>Setup</h3>
+      <pre><code><span class="comment"># Install dependencies</span>
+npm install
+
+<span class="comment"># Generate RSA keys for JWT signing</span>
+npm run generate-keys
+
+<span class="comment"># Set up .env (see .env.example)</span>
+<span class="comment"># DATABASE_URL, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY,</span>
+<span class="comment"># JWT_ISSUER, RESEND_API_KEY, EMAIL_FROM,</span>
+<span class="comment"># NEXT_PUBLIC_APP_URL, ADMIN_BOOTSTRAP_EMAIL</span>
+
+<span class="comment"># Push schema to database</span>
+npm run db:push
+
+<span class="comment"># Generate Prisma client</span>
+npm run db:generate
+
+<span class="comment"># Start dev server on port 3101</span>
+npm run dev</code></pre>
+    </div>
+    <div>
+      <h3>Common Commands</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><td>npm run dev</td><td>Dev server (:3101)</td></tr>
+          <tr><td>npm run build</td><td>Production build</td></tr>
+          <tr><td>npm run lint</td><td>ESLint</td></tr>
+          <tr><td>npm run db:generate</td><td>Prisma client</td></tr>
+          <tr><td>npm run db:push</td><td>Push schema (dev)</td></tr>
+          <tr><td>npm run db:migrate</td><td>Run migrations</td></tr>
+          <tr><td>npm run db:studio</td><td>Prisma Studio GUI</td></tr>
+          <tr><td>npm run generate-keys</td><td>RSA key pair</td></tr>
+        </table>
+      </div>
+      <h3 style="margin-top: 20px;">Requirements</h3>
+      <p style="font-size: 0.95rem;">Node.js v20.19+, v22.12+, or v24.0+ (Prisma 7 requirement)</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 12: Architecture Diagram -->
+<div class="slide" id="s12">
+  <h2>Architecture Overview</h2>
+  <div style="display:flex; justify-content:center; margin-top:20px;">
+    <pre style="font-size:0.85rem; line-height:1.7; max-width:900px;">
+<span class="comment">                    ┌─────────────────────────────────┐</span>
+<span class="comment">                    │       Client Application         │</span>
+<span class="comment">                    │  (uses access token in headers)  │</span>
+<span class="comment">                    └──────────┬──────────┬────────────┘</span>
+<span class="comment">                               │          │</span>
+<span class="comment">          Redirect to hosted   │          │ GET /.well-known/jwks.json</span>
+<span class="comment">            login page         │          │   (validate tokens locally)</span>
+<span class="comment">                               │          │</span>
+<span class="comment">                    ┌──────────▼──────────▼────────────┐</span>
+<span style="color:var(--accent);font-weight:700">                    │      Watson Auth Service          │</span>
+<span class="comment">                    │         (Next.js 16)              │</span>
+<span class="comment">                    │                                   │</span>
+<span class="comment">                    │  ┌─────────┐  ┌───────────────┐  │</span>
+<span class="comment">                    │  │ Hosted  │  │   API Layer   │  │</span>
+<span class="comment">                    │  │ Pages   │  │  /api/auth/*  │  │</span>
+<span class="comment">                    │  └────┬────┘  │  /api/admin/* │  │</span>
+<span class="comment">                    │       │       └───────┬───────┘  │</span>
+<span class="comment">                    │       └───────┬───────┘          │</span>
+<span class="comment">                    │               │                   │</span>
+<span class="comment">                    │  ┌────────────▼────────────────┐  │</span>
+<span class="comment">                    │  │        Lib Layer            │  │</span>
+<span class="comment">                    │  │  jwt · password · email     │  │</span>
+<span class="comment">                    │  │  tokens · audit · db         │  │</span>
+<span class="comment">                    │  └────────────┬────────────────┘  │</span>
+<span class="comment">                    └───────────────┼───────────────────┘</span>
+<span class="comment">                                    │</span>
+<span class="comment">                         ┌──────────▼──────────┐</span>
+<span class="comment">                         │    PostgreSQL DB     │</span>
+<span class="comment">                         │   (via Prisma 7)     │</span>
+<span class="comment">                         └─────────────────────┘</span></pre>
+  </div>
+</div>
+
+<!-- Slide 13: Future / Questions -->
+<div class="slide" id="s13">
+  <h2>Future Enhancements</h2>
+  <div class="grid grid-2" style="margin-top: 8px;">
+    <div>
+      <ul>
+        <li>Google OAuth integration</li>
+        <li>Webhook system for auth events</li>
+        <li>Rate limiting</li>
+        <li>User impersonation (admin feature)</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>Organisation management UI</li>
+        <li>SDK package (<code>@watsonauth/sdk</code>)</li>
+        <li>Additional OAuth providers</li>
+        <li>Multi-factor authentication</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top: 48px; padding: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; text-align: center;">
+    <h3 style="color: var(--text); font-size: 1.5rem;">Questions?</h3>
+    <p style="margin-top: 8px;">Check <code>CLAUDE.md</code> for full documentation, API examples, and coding conventions.</p>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prev()">&#8592; Prev</button>
+  <span id="counter">1 / 13</span>
+  <button onclick="next()">Next &#8594;</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+
+  function show(n) {
+    slides[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    counter.textContent = `${current + 1} / ${slides.length}`;
+  }
+  function next() { show(current + 1); }
+  function prev() { show(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+</script>
+</body>
+</html>
