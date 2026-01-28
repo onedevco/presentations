@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Spreadsheet to App: Your Journey to Building Software</title>
+    <style>
+        :root {
+            --sage: #97BC62;
+            --forest: #2C5F2D;
+            --cream: #F5F5F5;
+            --dark-forest: #1a3d1c;
+            --moss: #6b8e4e;
+            --bg: #1a2f23;
+            --text: #e8f0e8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Calibri, sans-serif;
+            font-size: 18px;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: Georgia, 'Times New Roman', serif;
+            color: var(--sage);
+        }
+
+        h1 { font-size: 2.8em; }
+        h2 { font-size: 2.2em; margin-bottom: 0.8em; }
+        h3 { font-size: 1.4em; color: var(--cream); }
+
+        /* Slide container */
+        .presentation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px 100px 100px 100px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .slide.center {
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav button {
+            background: var(--forest);
+            color: var(--cream);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .nav button:hover {
+            background: var(--sage);
+            color: var(--dark-forest);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 35px;
+            right: 40px;
+            color: var(--sage);
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        /* Progress bar */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--sage);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Components */
+        .subtitle {
+            font-size: 1.4em;
+            color: var(--sage);
+            font-style: italic;
+            margin-top: 0.5em;
+        }
+
+        .card-container {
+            display: flex;
+            gap: 25px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(44, 95, 45, 0.4);
+            border-radius: 12px;
+            padding: 25px;
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            border-left: 4px solid var(--sage);
+            text-align: left;
+        }
+
+        .card h3 { margin-top: 0; font-size: 1.3em; }
+        .card p { font-size: 1.05em; margin-bottom: 0; opacity: 0.9; }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .step-number {
+            background: var(--sage);
+            color: var(--dark-forest);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 { margin: 0 0 5px 0; font-size: 1.3em; }
+        .step-content p { margin: 0; opacity: 0.85; font-size: 1.05em; }
+
+        .code-example {
+            background: #0d1a10;
+            border-radius: 8px;
+            padding: 25px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1em;
+            margin: 25px 0;
+            border-left: 4px solid var(--sage);
+            overflow-x: auto;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .code-example .comment { color: #6a9955; }
+        .code-example .keyword { color: #569cd6; }
+        .code-example .string { color: #ce9178; }
+        .code-example .function { color: #dcdcaa; }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .comparison-col {
+            background: rgba(44, 95, 45, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .comparison-col.highlight {
+            background: rgba(151, 188, 98, 0.2);
+            border: 2px solid var(--sage);
+        }
+
+        .comparison-col h3 { margin-top: 0; }
+
+        .big-stat {
+            font-size: 4em;
+            font-weight: bold;
+            color: var(--sage);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .tool-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .tool-item .emoji { font-size: 2.5em; margin-bottom: 10px; }
+        .tool-item h4 { margin: 0; color: var(--cream); font-size: 1.2em; }
+        .tool-item p { font-size: 0.95em; margin: 8px 0 0 0; opacity: 0.8; }
+
+        .stage-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stage-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(151, 188, 98, 0.3);
+        }
+
+        .stage-dot.active {
+            background: var(--sage);
+            box-shadow: 0 0 10px var(--sage);
+        }
+
+        .stage-dot.completed { background: var(--moss); }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(151, 188, 98, 0.2), rgba(44, 95, 45, 0.4));
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid var(--sage);
+            text-align: left;
+        }
+
+        .highlight-box h3 { margin-top: 0; }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .feature-list li {
+            padding: 14px 0;
+            padding-left: 40px;
+            position: relative;
+            border-bottom: 1px solid rgba(151, 188, 98, 0.2);
+            font-size: 1.1em;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+            font-weight: bold;
+        }
+
+        .app-mockup {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            max-width: 400px;
+            margin: 20px auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .app-mockup-header {
+            background: var(--forest);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .app-mockup-content {
+            padding: 15px;
+            color: #333;
+            font-size: 0.7em;
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 2em;
+            color: var(--sage);
+            margin: 15px 0;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.6em;
+            text-align: center;
+            color: var(--sage);
+            padding: 40px;
+            line-height: 1.5;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+            text-align: left;
+        }
+
+        ul { margin-left: 20px; }
+        li { margin-bottom: 0.6em; font-size: 1.1em; }
+
+        .small { font-size: 0.95em; }
+
+        /* Title slide background */
+        .title-slide {
+            background: linear-gradient(135deg, var(--dark-forest) 0%, var(--forest) 100%);
+        }
+
+        /* Keyboard hints */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 35px;
+            left: 40px;
+            color: rgba(151, 188, 98, 0.5);
+            font-size: 12px;
+        }
+
+        @media (max-width: 900px) {
+            body { font-size: 16px; }
+            .slide { padding: 40px 30px 80px 30px; }
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.6em; }
+            .two-col, .comparison { grid-template-columns: 1fr; }
+            .tool-grid { grid-template-columns: repeat(2, 1fr); }
+            .card-container { flex-direction: column; align-items: center; }
+            .card { max-width: 100%; }
+        }
+
+        @media (min-width: 1400px) {
+            body { font-size: 22px; }
+            .slide { padding: 80px 150px 120px 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+
+    <div class="presentation" id="presentation">
+
+        <!-- SLIDE 1: Title -->
+        <div class="slide center title-slide active">
+            <h1>From Spreadsheet to App</h1>
+            <p class="subtitle">A Non-Developer's Guide to Building Software with AI</p>
+            <div style="margin-top: 60px; opacity: 0.7; font-size: 0.9em;">
+                Your journey from Excel formulas to real applications
+            </div>
+        </div>
+
+        <!-- SLIDE 2: The Opportunity -->
+        <div class="slide">
+            <h2>The World Has Changed</h2>
+            <div class="stats-row">
+                <div>
+                    <div class="big-stat">2024</div>
+                    <div class="stat-label">AI tools became<br>accessible to everyone</div>
+                </div>
+                <div>
+                    <div class="big-stat">0</div>
+                    <div class="stat-label">Lines of code needed<br>to start building</div>
+                </div>
+                <div>
+                    <div class="big-stat">∞</div>
+                    <div class="stat-label">Possibilities for<br>your ideas</div>
+                </div>
+            </div>
+            <div class="highlight-box" style="text-align: center; max-width: 600px; margin: 30px auto;">
+                If you can describe what you want, you can build it.
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Your Spreadsheet Skills Are Valuable -->
+        <div class="slide">
+            <h2>Your Spreadsheet Skills Are Gold</h2>
+            <div class="two-col">
+                <div>
+                    <h3 style="color: var(--sage);">What You Already Know</h3>
+                    <ul class="feature-list">
+                        <li>Organizing data in rows and columns</li>
+                        <li>Creating formulas and calculations</li>
+                        <li>Thinking about inputs and outputs</li>
+                        <li>Building logic (IF statements)</li>
+                        <li>Visualizing with charts</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--sage);">How That Translates</h3>
+                    <ul class="feature-list">
+                        <li>Database design fundamentals</li>
+                        <li>Programming logic</li>
+                        <li>User interface thinking</li>
+                        <li>Conditional programming</li>
+                        <li>Data visualization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: The Journey Overview -->
+        <div class="slide center">
+            <h2>The Journey We'll Take Together</h2>
+            <div class="stage-indicator">
+                <div class="stage-dot active"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+            </div>
+            <div class="card-container">
+                <div class="card">
+                    <div class="icon-circle">📊</div>
+                    <h3>Stage 1</h3>
+                    <p>Your spreadsheet idea</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">🤖</div>
+                    <h3>Stage 2</h3>
+                    <p>Claude builds a prototype</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">🚀</div>
+                    <h3>Stage 3</h3>
+                    <p>A real web application</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">🌐</div>
+                    <h3>Stage 4</h3>
+                    <p>Deployed for the world</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Stage 1 - The Idea -->
+        <div class="slide">
+            <div class="stage-indicator">
+                <div class="stage-dot active"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+            </div>
+            <h2>Stage 1: Your Retirement Budget Tracker</h2>
+            <div class="highlight-box">
+                <h3>The Problem</h3>
+                <p>You're approaching retirement and want to track: monthly income from various sources, expenses by category, how long your savings will last, and "what if" scenarios for different spending levels.</p>
+            </div>
+            <p style="margin-top: 20px;">Right now, you might build this in Excel with multiple sheets, complex formulas, and manual updates. Let's see what's possible...</p>
+        </div>
+
+        <!-- SLIDE 6: What You'd Build in Excel -->
+        <div class="slide">
+            <h2>The Spreadsheet Approach</h2>
+            <div class="comparison">
+                <div class="comparison-col">
+                    <h3>What Works</h3>
+                    <ul>
+                        <li>Quick to set up</li>
+                        <li>Familiar interface</li>
+                        <li>Powerful formulas</li>
+                        <li>Works offline</li>
+                    </ul>
+                </div>
+                <div class="comparison-col">
+                    <h3>The Pain Points</h3>
+                    <ul>
+                        <li>Gets complex fast</li>
+                        <li>Easy to break formulas</li>
+                        <li>Hard to share</li>
+                        <li>Not mobile-friendly</li>
+                        <li>Manual data entry</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px; opacity: 0.8;">
+                What if we could keep the good parts and fix the pain points?
+            </p>
+        </div>
+
+        <!-- SLIDE 7: Enter Claude -->
+        <div class="slide center">
+            <div class="stage-indicator">
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot active"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+            </div>
+            <h2>Stage 2: Meet Your AI Assistant</h2>
+            <div class="tool-grid" style="max-width: 700px; margin: 30px auto;">
+                <div class="tool-item">
+                    <div class="emoji">💬</div>
+                    <h4>Claude Chat</h4>
+                    <p>Brainstorm and plan your app</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">📁</div>
+                    <h4>Projects</h4>
+                    <p>Save context and iterate</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">🛠️</div>
+                    <h4>Cowork</h4>
+                    <p>Build working prototypes</p>
+                </div>
+            </div>
+            <p class="small" style="text-align: center; margin-top: 20px;">
+                All available at claude.ai — no coding knowledge required to start
+            </p>
+        </div>
+
+        <!-- SLIDE 8: How You'd Describe It -->
+        <div class="slide">
+            <h2>Just Describe What You Want</h2>
+            <div class="code-example" style="font-family: inherit; background: rgba(44, 95, 45, 0.4);">
+                <p style="margin: 0;"><strong>You say to Claude:</strong></p>
+                <p style="margin: 15px 0 0 0; font-style: italic;">
+                    "I want to build a retirement budget tracker. I need to enter my monthly income from pension, investments, and social security. Then track my expenses by category like housing, food, healthcare, and travel. I want to see projections for how long my savings will last at different spending levels. Show me charts of my spending trends."
+                </p>
+            </div>
+            <div class="arrow-down">↓</div>
+            <p style="text-align: center; font-size: 1.1em; color: var(--sage);">
+                Claude understands and starts building
+            </p>
+        </div>
+
+        <!-- SLIDE 9: What Claude Creates -->
+        <div class="slide">
+            <h2>Claude Creates a Working Prototype</h2>
+            <div class="two-col">
+                <div>
+                    <div class="app-mockup">
+                        <div class="app-mockup-header">
+                            💰 Retirement Budget Tracker
+                        </div>
+                        <div class="app-mockup-content">
+                            <div style="margin-bottom: 10px;"><strong>Monthly Income</strong></div>
+                            <div style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee;">
+                                <span>Pension</span><span style="color: green;">$2,400</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee;">
+                                <span>Social Security</span><span style="color: green;">$1,850</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 5px 0; font-weight: bold; margin-top: 10px;">
+                                <span>Total Income</span><span style="color: green;">$4,250</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3>In Minutes, You Get:</h3>
+                    <ul class="feature-list">
+                        <li>Interactive forms for data entry</li>
+                        <li>Automatic calculations</li>
+                        <li>Visual charts and graphs</li>
+                        <li>Mobile-friendly design</li>
+                        <li>Works in any browser</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: The Code Behind It -->
+        <div class="slide">
+            <h2>What's Happening Behind the Scenes</h2>
+            <p class="small" style="margin-bottom: 15px;">Don't worry — you don't write this. Claude does. But here's a peek:</p>
+            <div class="code-example">
+                <span class="comment">// This is what your "formula" looks like in code</span><br><br>
+                <span class="keyword">function</span> <span class="function">calculateMonthsRemaining</span>(savings, monthlySpend) {<br>
+                &nbsp;&nbsp;<span class="keyword">const</span> monthlyIncome = pension + socialSecurity + investments;<br>
+                &nbsp;&nbsp;<span class="keyword">const</span> monthlyDeficit = monthlySpend - monthlyIncome;<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<span class="keyword">if</span> (monthlyDeficit <= <span class="string">0</span>) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"Indefinite — you're living within your means!"</span>;<br>
+                &nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;<span class="keyword">return</span> Math.floor(savings / monthlyDeficit);<br>
+                }
+            </div>
+            <p class="small" style="text-align: center; opacity: 0.8;">
+                This is like a supercharged version of your Excel IF() formula
+            </p>
+        </div>
+
+        <!-- SLIDE 11: Iterate and Improve -->
+        <div class="slide">
+            <h2>Keep Improving with Conversation</h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="journey-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>"Add a way to categorize expenses"</h3>
+                        <p>Claude adds dropdown menus and category tracking</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>"Show me a pie chart of spending"</h3>
+                        <p>Claude adds interactive visualizations</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>"Add a 'what if' calculator"</h3>
+                        <p>Claude builds scenario planning tools</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>"Make it work on my phone"</h3>
+                        <p>Claude optimizes for mobile screens</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: What You Can Build Yourself -->
+        <div class="slide">
+            <h2>What You Can Build Right Now</h2>
+            <p style="margin-bottom: 20px;">Using Claude Chat and Cowork, with zero coding:</p>
+            <div class="card-container">
+                <div class="card">
+                    <div class="icon-circle">💰</div>
+                    <h3>Budget Trackers</h3>
+                    <p>Income, expenses, projections, charts</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">📋</div>
+                    <h3>Checklists & Lists</h3>
+                    <p>To-dos, inventories, wishlists</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">🧮</div>
+                    <h3>Calculators</h3>
+                    <p>Loan, retirement, investment</p>
+                </div>
+            </div>
+            <div class="card-container" style="margin-top: 20px;">
+                <div class="card">
+                    <div class="icon-circle">📅</div>
+                    <h3>Planners</h3>
+                    <p>Trips, events, meal planning</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">📊</div>
+                    <h3>Dashboards</h3>
+                    <p>Visualize any data you track</p>
+                </div>
+                <div class="card">
+                    <div class="icon-circle">📝</div>
+                    <h3>Forms</h3>
+                    <p>Data collection, surveys</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: The Limits of Simple Tools -->
+        <div class="slide">
+            <div class="stage-indicator">
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot active"></div>
+                <div class="stage-dot"></div>
+                <div class="stage-dot"></div>
+            </div>
+            <h2>Stage 3: When You Need More Power</h2>
+            <div class="comparison">
+                <div class="comparison-col">
+                    <h3>Simple Prototypes</h3>
+                    <ul>
+                        <li>Data stored in browser only</li>
+                        <li>Single user</li>
+                        <li>No login/accounts</li>
+                        <li>Limited by browser memory</li>
+                    </ul>
+                </div>
+                <div class="comparison-col highlight">
+                    <h3>Real Applications</h3>
+                    <ul>
+                        <li>Data saved permanently</li>
+                        <li>Multiple users possible</li>
+                        <li>Secure login</li>
+                        <li>Fast with any data size</li>
+                        <li>Works anywhere, anytime</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 25px;">
+                This is where you might work with someone who knows the next set of tools...
+            </p>
+        </div>
+
+        <!-- SLIDE 14: The Development Stack -->
+        <div class="slide">
+            <h2>The Tools for Bigger Apps</h2>
+            <div class="tool-grid">
+                <div class="tool-item">
+                    <div class="emoji">⚡</div>
+                    <h4>Next.js</h4>
+                    <p>The framework for building modern web apps</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">🗄️</div>
+                    <h4>PostgreSQL</h4>
+                    <p>A powerful database to store your data forever</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">▲</div>
+                    <h4>Vercel</h4>
+                    <p>Puts your app on the internet for everyone</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">✨</div>
+                    <h4>Cursor</h4>
+                    <p>AI-powered code editor (like Claude for developers)</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">🔐</div>
+                    <h4>Auth Systems</h4>
+                    <p>Secure login and user accounts</p>
+                </div>
+                <div class="tool-item">
+                    <div class="emoji">📱</div>
+                    <h4>Responsive Design</h4>
+                    <p>Works perfectly on any device</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: Database Concept -->
+        <div class="slide">
+            <h2>Your Spreadsheet Becomes a Database</h2>
+            <div class="two-col">
+                <div>
+                    <h3>Spreadsheet Thinking</h3>
+                    <div class="code-example" style="font-size: 0.75em;">
+                        <table style="width: 100%; color: var(--cream);">
+                            <tr style="background: rgba(151, 188, 98, 0.3);">
+                                <th style="padding: 8px;">Date</th><th style="padding: 8px;">Category</th><th style="padding: 8px;">Amount</th>
+                            </tr>
+                            <tr><td style="padding: 8px;">Jan 1</td><td style="padding: 8px;">Groceries</td><td style="padding: 8px;">$145</td></tr>
+                            <tr><td style="padding: 8px;">Jan 2</td><td style="padding: 8px;">Gas</td><td style="padding: 8px;">$52</td></tr>
+                            <tr><td style="padding: 8px;">Jan 3</td><td style="padding: 8px;">Healthcare</td><td style="padding: 8px;">$200</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3>Database Thinking</h3>
+                    <div class="code-example" style="font-size: 0.75em;">
+                        <span class="comment">-- Same idea, more powerful:</span><br><br>
+                        <span class="keyword">SELECT</span> category, <span class="function">SUM</span>(amount)<br>
+                        <span class="keyword">FROM</span> expenses<br>
+                        <span class="keyword">WHERE</span> date >= <span class="string">'2024-01-01'</span><br>
+                        <span class="keyword">GROUP BY</span> category<br>
+                        <span class="keyword">ORDER BY</span> <span class="function">SUM</span>(amount) <span class="keyword">DESC</span>;
+                    </div>
+                </div>
+            </div>
+            <p class="small" style="text-align: center; margin-top: 20px;">
+                It's like SUMIF and VLOOKUP, but for millions of rows instantly
+            </p>
+        </div>
+
+        <!-- SLIDE 16: The Build Process -->
+        <div class="slide">
+            <h2>How a Developer Builds Your Vision</h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="journey-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Start with Your Prototype</h3>
+                        <p>The Claude-built prototype becomes the blueprint</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Design the Database</h3>
+                        <p>Turn your "sheets" into permanent data storage</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Build the Interface</h3>
+                        <p>Create screens for entering and viewing data</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Add User Accounts</h3>
+                        <p>So only you can see your data</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Deploy to the Cloud</h3>
+                        <p>Access from anywhere, on any device</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 17: What AI Does for Developers -->
+        <div class="slide">
+            <h2>Developers Use AI Too</h2>
+            <div class="highlight-box">
+                <p style="margin: 0;">Cursor (and similar AI tools) let developers build 5-10x faster. What used to take weeks can now take days. The AI writes most of the code while the developer guides and refines.</p>
+            </div>
+            <div class="comparison" style="margin-top: 25px;">
+                <div class="comparison-col">
+                    <h3>Before AI (2020)</h3>
+                    <ul class="small">
+                        <li>Simple app: 2-4 weeks</li>
+                        <li>Medium app: 2-3 months</li>
+                        <li>Write every line by hand</li>
+                        <li>Debug for hours</li>
+                    </ul>
+                </div>
+                <div class="comparison-col highlight">
+                    <h3>With AI (Today)</h3>
+                    <ul class="small">
+                        <li>Simple app: 2-4 days</li>
+                        <li>Medium app: 2-4 weeks</li>
+                        <li>AI writes, human guides</li>
+                        <li>AI helps find bugs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 18: Deployment -->
+        <div class="slide">
+            <div class="stage-indicator">
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot active"></div>
+                <div class="stage-dot"></div>
+            </div>
+            <h2>Stage 4: Going Live</h2>
+            <div class="two-col">
+                <div>
+                    <h3>What "Deployment" Means</h3>
+                    <p>Your app goes from running on one computer to being available on the internet, accessible from any device, anywhere in the world.</p>
+                    <p class="small" style="margin-top: 20px;">Services like Vercel make this nearly automatic — connect your code, click deploy, get a web address.</p>
+                </div>
+                <div>
+                    <div class="card" style="max-width: 100%;">
+                        <h3>Your App Gets:</h3>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>A real web address</li>
+                            <li>Automatic security (HTTPS)</li>
+                            <li>Fast loading worldwide</li>
+                            <li>Automatic backups</li>
+                            <li>99.9% uptime</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 19: The Full Picture -->
+        <div class="slide center">
+            <div class="stage-indicator">
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot completed"></div>
+                <div class="stage-dot active"></div>
+            </div>
+            <h2>The Complete Journey</h2>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px;">
+                <div class="card" style="text-align: center; min-width: 140px;">
+                    <div style="font-size: 2em;">📊</div>
+                    <p class="small">Spreadsheet Idea</p>
+                </div>
+                <div style="font-size: 2em; color: var(--sage);">→</div>
+                <div class="card" style="text-align: center; min-width: 140px;">
+                    <div style="font-size: 2em;">💬</div>
+                    <p class="small">Claude Prototype</p>
+                </div>
+                <div style="font-size: 2em; color: var(--sage);">→</div>
+                <div class="card" style="text-align: center; min-width: 140px;">
+                    <div style="font-size: 2em;">⚡</div>
+                    <p class="small">Full Development</p>
+                </div>
+                <div style="font-size: 2em; color: var(--sage);">→</div>
+                <div class="card" style="text-align: center; min-width: 140px;">
+                    <div style="font-size: 2em;">🌐</div>
+                    <p class="small">Live on the Web</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 20: Real Example - Retirement Tracker -->
+        <div class="slide">
+            <h2>Your Retirement Tracker: Full Version</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>📥 Data Entry</h3>
+                    <p>Log income sources, track every expense, import bank statements</p>
+                </div>
+                <div class="card">
+                    <h3>📊 Dashboards</h3>
+                    <p>Monthly summaries, spending by category, trend charts</p>
+                </div>
+                <div class="card">
+                    <h3>🔮 Projections</h3>
+                    <p>"What if" scenarios, retirement runway calculator</p>
+                </div>
+            </div>
+            <div class="card-container" style="margin-top: 20px;">
+                <div class="card">
+                    <h3>📱 Mobile App</h3>
+                    <p>Log expenses on the go, check balances anywhere</p>
+                </div>
+                <div class="card">
+                    <h3>🔔 Alerts</h3>
+                    <p>Budget warnings, unusual spending detection</p>
+                </div>
+                <div class="card">
+                    <h3>📄 Reports</h3>
+                    <p>Monthly PDFs, tax summaries, year-end reviews</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 21: Getting Started -->
+        <div class="slide">
+            <h2>How to Start Today</h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="journey-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Think About Your Pain Points</h3>
+                        <p>What spreadsheet do you wish was easier, smarter, or more visual?</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Write It Down in Plain English</h3>
+                        <p>Describe what you want as if explaining to a friend</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Open Claude and Start a Conversation</h3>
+                        <p>Use Cowork mode for building working prototypes</p>
+                    </div>
+                </div>
+                <div class="journey-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Iterate Until It Feels Right</h3>
+                        <p>Ask for changes, additions, improvements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 22: Tips for Prompting -->
+        <div class="slide">
+            <h2>Tips for Talking to Claude</h2>
+            <div class="two-col">
+                <div>
+                    <div class="highlight-box">
+                        <h3>✓ Do This</h3>
+                        <ul class="small" style="margin-bottom: 0;">
+                            <li>"I want to track X, Y, and Z"</li>
+                            <li>"Show me a chart of..."</li>
+                            <li>"Add a button that..."</li>
+                            <li>"When I enter X, calculate Y"</li>
+                            <li>"Make it look like..." (describe or share examples)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="highlight-box" style="border-left-color: #a55;">
+                        <h3>✗ Avoid This</h3>
+                        <ul class="small" style="margin-bottom: 0;">
+                            <li>"Build me an app" (too vague)</li>
+                            <li>Technical jargon you don't understand</li>
+                            <li>Trying to describe the code</li>
+                            <li>Being afraid to ask for changes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 25px; color: var(--sage);">
+                The best prompts describe outcomes, not implementations
+            </p>
+        </div>
+
+        <!-- SLIDE 23: Choosing Complexity -->
+        <div class="slide">
+            <h2>Which Path Is Right For You?</h2>
+            <div class="comparison">
+                <div class="comparison-col">
+                    <h3 style="text-align: left;">Stay Simple If...</h3>
+                    <ul>
+                        <li>Just you using it</li>
+                        <li>Data isn't mission-critical</li>
+                        <li>Okay with browser storage</li>
+                        <li>Don't need mobile app</li>
+                        <li>Happy to rebuild if needed</li>
+                    </ul>
+                </div>
+                <div class="comparison-col highlight">
+                    <h3 style="text-align: left;">Go Bigger If...</h3>
+                    <ul>
+                        <li>Family needs access</li>
+                        <li>Data must never be lost</li>
+                        <li>Years of records to keep</li>
+                        <li>Need phone access</li>
+                        <li>Want it to "just work"</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="small" style="text-align: center; margin-top: 25px;">
+                Start simple. Upgrade when you hit limits. That's the smart path.
+            </p>
+        </div>
+
+        <!-- SLIDE 24: The Mindset Shift -->
+        <div class="slide center">
+            <h2>The Real Transformation</h2>
+            <div class="quote">
+                "You don't need to learn to code.<br>
+                You need to learn to describe what you want<br>
+                clearly and completely."
+            </div>
+            <p style="margin-top: 30px;">
+                Your spreadsheet expertise taught you to think systematically.<br>
+                AI turns that thinking into software.
+            </p>
+        </div>
+
+        <!-- SLIDE 25: Your Retirement Project -->
+        <div class="slide">
+            <h2>Let's Start Your Project</h2>
+            <div class="highlight-box">
+                <h3>Your First Conversation with Claude</h3>
+                <p style="font-style: italic; margin-bottom: 0;">
+                    "I'm retiring soon and want to build a budget tracker. I have income from a pension ($X/month), social security ($Y/month), and investments (variable). I want to log my expenses by category, see monthly summaries, and understand how long my savings will last at different spending levels. Can you build this for me?"
+                </p>
+            </div>
+            <p style="text-align: center; margin-top: 30px; font-size: 1.1em;">
+                That's it. That's all you need to start.
+            </p>
+        </div>
+
+        <!-- SLIDE 26: Summary -->
+        <div class="slide center">
+            <h2>Key Takeaways</h2>
+            <div style="text-align: left; max-width: 600px; margin: 30px auto;">
+                <ul class="feature-list" style="font-size: 0.95em;">
+                    <li>Your spreadsheet skills translate directly to app thinking</li>
+                    <li>AI lets you build working prototypes without code</li>
+                    <li>Start simple — you can always scale up later</li>
+                    <li>Describe outcomes, not technical details</li>
+                    <li>Iteration is the key — keep asking for improvements</li>
+                    <li>Real apps need databases and deployment (that's when you need help)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE 27: Closing -->
+        <div class="slide center title-slide">
+            <h1>Ready to Build?</h1>
+            <p class="subtitle">Your spreadsheet ideas deserve to become real apps</p>
+            <div style="margin-top: 50px;">
+                <div class="card-container" style="justify-content: center;">
+                    <div class="card" style="text-align: center;">
+                        <p style="margin: 0; font-size: 1.2em;">Start at <strong>claude.ai</strong></p>
+                        <p class="small" style="margin-top: 10px;">Free to try. Start a conversation today.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav">
+        <button onclick="prevSlide()">← Previous</button>
+        <button onclick="nextSlide()">Next →</button>
+    </div>
+
+    <div class="slide-counter" id="counter">1 / 27</div>
+    <div class="keyboard-hint">Use arrow keys or buttons to navigate</div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const counter = document.getElementById('counter');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            // Clamp index
+            if (index < 0) index = 0;
+            if (index >= slides.length) index = slides.length - 1;
+
+            // Hide all slides
+            slides.forEach(slide => slide.classList.remove('active'));
+
+            // Show current slide
+            slides[index].classList.add('active');
+            currentSlide = index;
+
+            // Update progress bar
+            const progressPercent = ((index + 1) / slides.length) * 100;
+            progress.style.width = progressPercent + '%';
+
+            // Update counter
+            counter.textContent = (index + 1) + ' / ' + slides.length;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(slides.length - 1);
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
