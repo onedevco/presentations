@@ -18,155 +18,67 @@
             --text-muted: #94a3b8;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            min-height: 100%;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; min-height: 100%; }
 
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             background: var(--bg);
             color: var(--text);
             overflow: hidden;
         }
 
         h1 { font-size: 2.8em; line-height: 1.2; }
-        h2 { font-size: 2.2em; margin-bottom: 0.6em; }
-        h3 { font-size: 1.4em; color: var(--text); margin-bottom: 0.3em; }
+        h2 { font-size: 1.8em; margin-bottom: 0.5em; }
+        h3 { font-size: 1.2em; color: var(--text); margin-bottom: 0.3em; }
 
         .progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
+            position: fixed; top: 0; left: 0; height: 4px;
             background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
-            transition: width 0.3s ease;
-            z-index: 1000;
+            transition: width 0.3s ease; z-index: 1000;
         }
 
-        .presentation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-        }
+        .presentation { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; }
 
         .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            padding: 60px 100px 100px 100px;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            overflow-y: auto;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%; padding: 50px 80px 90px 80px;
+            display: none; opacity: 0; transition: opacity 0.4s ease; overflow-y: auto;
         }
 
-        .slide.active {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            opacity: 1;
-        }
+        .slide.active { display: flex; flex-direction: column; justify-content: center; opacity: 1; }
+        .slide.center { align-items: center; text-align: center; }
 
-        .slide.center {
-            align-items: center;
-            text-align: center;
-        }
-
-        /* Navigation */
         .nav {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 1000;
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 15px; z-index: 1000;
         }
 
         .nav button {
-            background: var(--card-bg);
-            color: var(--text);
-            border: 1px solid #334155;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.2s;
+            background: var(--card-bg); color: var(--text); border: 1px solid #334155;
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s;
         }
 
-        .nav button:hover {
-            background: var(--accent-blue);
-            border-color: var(--accent-blue);
-        }
+        .nav button:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
 
-        .slide-counter {
-            position: fixed;
-            bottom: 35px;
-            right: 40px;
-            color: var(--text-muted);
-            font-size: 14px;
-            z-index: 1000;
-        }
+        .slide-counter { position: fixed; bottom: 30px; right: 40px; color: var(--text-muted); font-size: 13px; z-index: 1000; }
+        .keyboard-hint { position: fixed; bottom: 30px; left: 40px; color: rgba(148, 163, 184, 0.5); font-size: 11px; }
 
-        .keyboard-hint {
-            position: fixed;
-            bottom: 35px;
-            left: 40px;
-            color: rgba(148, 163, 184, 0.5);
-            font-size: 12px;
-        }
-
-        /* Title slide */
-        .title-slide {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
-        }
-
+        .title-slide { background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%); }
         .title-slide h1 {
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
 
-        .subtitle {
-            font-size: 1.4em;
-            color: var(--text-muted);
-            margin-top: 0.5em;
-        }
+        .subtitle { font-size: 1.3em; color: var(--text-muted); margin-top: 0.5em; }
 
-        /* Section header slides */
-        .section-slide {
-            background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg) 100%);
-        }
-
-        .section-slide h2 {
-            font-size: 3em;
-        }
+        .section-slide { background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg) 100%); }
+        .section-slide h2 { font-size: 2.5em; }
 
         .section-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.9em;
-            margin-bottom: 20px;
-            font-weight: 600;
+            display: inline-block; padding: 8px 20px; border-radius: 30px;
+            font-size: 0.85em; margin-bottom: 20px; font-weight: 600;
         }
 
         .badge-quick { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
@@ -174,152 +86,86 @@
         .badge-meaty { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
         .badge-fun { background: rgba(236, 72, 153, 0.2); color: var(--accent-pink); }
 
-        /* App idea slides */
-        .app-slide {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .app-slide { max-width: 950px; margin: 0 auto; }
 
-        .app-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+        .app-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
 
         .app-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            flex-shrink: 0;
+            width: 60px; height: 60px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; flex-shrink: 0;
         }
 
-        .app-title h2 {
-            margin-bottom: 5px;
-        }
-
-        .app-category {
-            color: var(--text-muted);
-            font-size: 0.9em;
-        }
+        .app-title h2 { margin-bottom: 2px; }
+        .app-category { color: var(--text-muted); font-size: 0.85em; }
 
         .app-description {
-            font-size: 1.2em;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            line-height: 1.6;
+            font-size: 1em; color: var(--text-muted);
+            margin-bottom: 16px; line-height: 1.5;
         }
 
-        .app-features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
+        .app-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 
         .feature {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid var(--accent-blue);
+            background: var(--card-bg); padding: 12px 14px;
+            border-radius: 10px; border-left: 3px solid var(--accent-blue);
         }
 
-        .feature h4 {
-            color: var(--text);
-            margin-bottom: 5px;
-            font-size: 1em;
+        .feature h4 { color: var(--text); margin-bottom: 3px; font-size: 0.85em; }
+        .feature p { color: var(--text-muted); font-size: 0.75em; }
+
+        .prompt-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px; padding: 14px 18px; margin-top: 16px;
         }
 
-        .feature p {
-            color: var(--text-muted);
-            font-size: 0.85em;
+        .prompt-box-header {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+            font-size: 0.7em; color: var(--accent-blue);
+            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
         }
 
-        .complexity {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 25px;
-            padding: 10px 16px;
-            background: var(--card-bg);
-            border-radius: 8px;
-            font-size: 0.85em;
-            color: var(--text-muted);
-        }
+        .prompt-text { font-size: 0.8em; color: var(--text); font-style: italic; line-height: 1.5; }
 
-        .complexity-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .complexity-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #334155;
-        }
-
-        .complexity-dot.filled {
-            background: var(--accent-green);
-        }
-
-        .complexity-dot.filled.medium {
-            background: var(--accent-orange);
-        }
-
-        .complexity-dot.filled.hard {
-            background: var(--accent-pink);
-        }
-
-        /* Color coding by category */
         .finance .app-icon { background: linear-gradient(135deg, #22c55e, #16a34a); }
         .finance .feature { border-left-color: #22c55e; }
-
         .health .app-icon { background: linear-gradient(135deg, #ec4899, #db2777); }
         .health .feature { border-left-color: #ec4899; }
-
         .productivity .app-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
         .productivity .feature { border-left-color: #3b82f6; }
-
         .home .app-icon { background: linear-gradient(135deg, #f97316, #ea580c); }
         .home .feature { border-left-color: #f97316; }
-
         .retirement .app-icon { background: linear-gradient(135deg, #a855f7, #9333ea); }
         .retirement .feature { border-left-color: #a855f7; }
-
         .fun .app-icon { background: linear-gradient(135deg, #06b6d4, #0891b2); }
         .fun .feature { border-left-color: #06b6d4; }
 
-        /* Responsive */
         @media (max-width: 900px) {
-            body { font-size: 16px; }
-            .slide { padding: 40px 30px 100px 30px; }
+            body { font-size: 15px; }
+            .slide { padding: 30px 20px 80px 20px; }
             h1 { font-size: 2em; }
-            h2 { font-size: 1.6em; }
-            .app-features { grid-template-columns: 1fr; }
+            h2 { font-size: 1.4em; }
+            .app-features { grid-template-columns: repeat(2, 1fr); }
             .app-header { flex-direction: column; text-align: center; }
         }
 
         @media (min-width: 1400px) {
-            body { font-size: 22px; }
-            .slide { padding: 80px 150px 120px 150px; }
+            body { font-size: 20px; }
+            .slide { padding: 60px 120px 100px 120px; }
         }
     </style>
 </head>
 <body>
     <div class="progress" id="progress"></div>
-
     <div class="presentation" id="presentation">
 
         <!-- SLIDE 1: Title -->
         <div class="slide center title-slide active">
             <h1>50 App Ideas</h1>
             <p class="subtitle">From simple calculators to full dashboards</p>
-            <div style="margin-top: 50px; color: var(--text-muted); font-size: 0.9em;">
-                All buildable with AI assistance • No coding experience required
+            <div style="margin-top: 40px; color: var(--text-muted); font-size: 0.9em;">
+                Each slide includes a prompt to give Claude to start building
             </div>
         </div>
 
@@ -330,7 +176,7 @@
             <p class="subtitle">Perfect for learning the basics</p>
         </div>
 
-        <!-- Quick Win: Net Worth Tracker -->
+        <!-- Net Worth Tracker -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -340,39 +186,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    See your complete financial picture at a glance. Add up all your assets (savings, investments, property) and subtract your liabilities (mortgage, loans, credit cards) to track your net worth over time.
-                </p>
+                <p class="app-description">See your complete financial picture. Add assets and liabilities to track net worth over time.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Asset Categories</h4>
-                        <p>Bank accounts, investments, property, vehicles</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Liability Tracking</h4>
-                        <p>Mortgages, loans, credit cards, other debts</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Visual Chart</h4>
-                        <p>See assets vs liabilities in a clear bar chart</p>
-                    </div>
-                    <div class="feature">
-                        <h4>History</h4>
-                        <p>Track changes month over month</p>
-                    </div>
+                    <div class="feature"><h4>Asset Categories</h4><p>Bank accounts, investments, property</p></div>
+                    <div class="feature"><h4>Liability Tracking</h4><p>Mortgages, loans, credit cards</p></div>
+                    <div class="feature"><h4>Visual Chart</h4><p>Assets vs liabilities bar chart</p></div>
+                    <div class="feature"><h4>History</h4><p>Track changes month over month</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a net worth tracker. I want to add assets in categories (bank accounts, investments, property, vehicles) and liabilities (mortgage, loans, credit cards). Show a bar chart comparing total assets vs liabilities, calculate net worth, and let me save monthly snapshots to track changes over time. Store data in localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Retirement Countdown -->
+        <!-- Retirement Countdown -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -382,39 +210,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Answer the big question: "How much do I need to retire?" Enter your target retirement age, expected expenses, and current savings to see projections and a countdown to your goal.
-                </p>
+                <p class="app-description">Answer "How much do I need?" with projections and a countdown to your retirement goal.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Goal Calculator</h4>
-                        <p>25x annual expenses rule of thumb</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Countdown Timer</h4>
-                        <p>Days/months/years until target date</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Progress Bar</h4>
-                        <p>Visual progress toward your goal</p>
-                    </div>
-                    <div class="feature">
-                        <h4>What-If Scenarios</h4>
-                        <p>Adjust variables to see impact</p>
-                    </div>
+                    <div class="feature"><h4>Goal Calculator</h4><p>25x annual expenses rule</p></div>
+                    <div class="feature"><h4>Countdown Timer</h4><p>Days/months/years to target</p></div>
+                    <div class="feature"><h4>Progress Bar</h4><p>Visual progress toward goal</p></div>
+                    <div class="feature"><h4>What-If Scenarios</h4><p>Adjust variables to see impact</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a retirement countdown calculator. I enter my current age, target retirement age, current savings, monthly contribution, and expected annual expenses. Calculate my goal using the 25x rule, show a progress bar, display a countdown to my retirement date, and let me adjust variables to see what-if scenarios."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Subscription Tracker -->
+        <!-- Subscription Tracker -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -424,39 +234,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Stop subscription creep! List all your recurring charges in one place—Netflix, gym, apps, insurance—and see the shocking annual total. Find subscriptions you forgot about.
-                </p>
+                <p class="app-description">List all recurring charges in one place and see the shocking annual total.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Add Subscriptions</h4>
-                        <p>Name, cost, billing frequency</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Annual Cost</h4>
-                        <p>See what you're really spending per year</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Renewal Alerts</h4>
-                        <p>Know before you're charged</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Category Breakdown</h4>
-                        <p>Entertainment, utilities, services</p>
-                    </div>
+                    <div class="feature"><h4>Add Subscriptions</h4><p>Name, cost, billing frequency</p></div>
+                    <div class="feature"><h4>Annual Cost</h4><p>True yearly spending total</p></div>
+                    <div class="feature"><h4>Renewal Alerts</h4><p>Know before you're charged</p></div>
+                    <div class="feature"><h4>Category Breakdown</h4><p>Entertainment, utilities, services</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a subscription tracker. I want to add subscriptions with name, cost, billing cycle (weekly/monthly/yearly), category, and next billing date. Show total monthly and annual cost, list upcoming renewals in the next 7 days, and display a pie chart by category. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Tip Calculator -->
+        <!-- Tip Calculator -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -466,39 +258,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    The classic starter app, but done right. Calculate tips at different percentages, split bills among friends, and even handle uneven splits when someone orders expensive wine.
-                </p>
+                <p class="app-description">Calculate tips, split bills evenly or unevenly among friends.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Quick Tips</h4>
-                        <p>15%, 18%, 20%, 25% buttons</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Bill Splitting</h4>
-                        <p>Divide evenly among 2+ people</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Uneven Splits</h4>
-                        <p>Different amounts per person</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Round Up Option</h4>
-                        <p>Round to nice even numbers</p>
-                    </div>
+                    <div class="feature"><h4>Quick Tips</h4><p>15%, 18%, 20%, 25% buttons</p></div>
+                    <div class="feature"><h4>Bill Splitting</h4><p>Divide evenly among people</p></div>
+                    <div class="feature"><h4>Uneven Splits</h4><p>Different amounts per person</p></div>
+                    <div class="feature"><h4>Round Up Option</h4><p>Round to nice even numbers</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a tip calculator app. Enter the bill amount, select tip percentage (with quick buttons for 15%, 18%, 20%, 25%), and number of people to split between. Show tip amount, total with tip, and per-person amount. Include option to round up to a nice number and handle uneven splits where some people pay more."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Savings Goal Tracker -->
+        <!-- Savings Goal Tracker -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -508,39 +282,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Track progress toward multiple savings goals with satisfying visual progress bars. Vacation fund, emergency fund, new car—see how close you are to each goal.
-                </p>
+                <p class="app-description">Track multiple savings goals with satisfying progress bars.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Multiple Goals</h4>
-                        <p>Track several goals at once</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Progress Bars</h4>
-                        <p>Visual satisfaction as you save</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Target Dates</h4>
-                        <p>Monthly savings needed to hit deadline</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Celebration</h4>
-                        <p>Confetti when you reach a goal! 🎉</p>
-                    </div>
+                    <div class="feature"><h4>Multiple Goals</h4><p>Track several goals at once</p></div>
+                    <div class="feature"><h4>Progress Bars</h4><p>Visual satisfaction as you save</p></div>
+                    <div class="feature"><h4>Target Dates</h4><p>Monthly amount needed</p></div>
+                    <div class="feature"><h4>Celebration</h4><p>Confetti when you reach a goal!</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a savings goal tracker. I can create multiple goals with name, target amount, current amount, and target date. Show each goal as a card with a progress bar. Calculate and display the monthly savings needed to hit each deadline. Add a confetti animation when a goal reaches 100%. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Water Intake Tracker -->
+        <!-- Water Intake Tracker -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -550,39 +306,21 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Stay hydrated! A simple counter to track glasses of water throughout the day. See your streak of well-hydrated days and get gentle reminders to drink more.
-                </p>
+                <p class="app-description">Simple counter to track glasses of water throughout the day.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Quick Add</h4>
-                        <p>One tap to log a glass</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Daily Goal</h4>
-                        <p>Set your target (8 glasses typical)</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Visual Progress</h4>
-                        <p>Fill up a water bottle graphic</p>
-                    </div>
-                    <div class="feature">
-                        <h4>History</h4>
-                        <p>See your hydration streak</p>
-                    </div>
+                    <div class="feature"><h4>Quick Add</h4><p>One tap to log a glass</p></div>
+                    <div class="feature"><h4>Daily Goal</h4><p>Set your target (8 glasses)</p></div>
+                    <div class="feature"><h4>Visual Progress</h4><p>Fill up a water bottle graphic</p></div>
+                    <div class="feature"><h4>History</h4><p>See your hydration streak</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a water intake tracker. Big button to add a glass of water, show progress toward a daily goal (default 8 glasses) with a visual water bottle that fills up. Track daily history, show current streak of days meeting the goal. Reset counter at midnight. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Medication Reminder -->
+        <!-- Medication Reminder -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -592,39 +330,21 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Never miss a dose or forget a refill. List all your medications with dosage, frequency, and refill dates. Check off when taken, see what's coming up.
-                </p>
+                <p class="app-description">Never miss a dose or forget a refill. Track all medications with schedules.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Medication List</h4>
-                        <p>Name, dosage, instructions</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Schedule</h4>
-                        <p>Morning, noon, evening, bedtime</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Refill Tracking</h4>
-                        <p>Know when to reorder</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Check Off</h4>
-                        <p>Mark as taken for the day</p>
-                    </div>
+                    <div class="feature"><h4>Medication List</h4><p>Name, dosage, instructions</p></div>
+                    <div class="feature"><h4>Schedule</h4><p>Morning, noon, evening, bedtime</p></div>
+                    <div class="feature"><h4>Refill Tracking</h4><p>Know when to reorder</p></div>
+                    <div class="feature"><h4>Check Off</h4><p>Mark as taken for the day</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a medication reminder app. Add medications with name, dosage, frequency (morning/noon/evening/bedtime), and refill date. Show today's medications as a checklist I can mark as taken. Highlight upcoming refills in the next 7 days. Reset checkboxes at midnight. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Sleep Calculator -->
+        <!-- Sleep Calculator -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -634,39 +354,21 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Wake up refreshed by timing your sleep to complete full 90-minute cycles. Enter when you need to wake up and see the best times to fall asleep (or vice versa).
-                </p>
+                <p class="app-description">Wake up refreshed by timing sleep to complete full 90-minute cycles.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Wake Time → Bedtime</h4>
-                        <p>"I need to wake at 7am"</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Bedtime → Wake Time</h4>
-                        <p>"I'm going to bed now"</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Sleep Cycles</h4>
-                        <p>Based on 90-minute cycles</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Fall Asleep Buffer</h4>
-                        <p>Accounts for 15 min to fall asleep</p>
-                    </div>
+                    <div class="feature"><h4>Wake Time → Bedtime</h4><p>"I need to wake at 7am"</p></div>
+                    <div class="feature"><h4>Bedtime → Wake Time</h4><p>"I'm going to bed now"</p></div>
+                    <div class="feature"><h4>Sleep Cycles</h4><p>Based on 90-minute cycles</p></div>
+                    <div class="feature"><h4>Fall Asleep Buffer</h4><p>Accounts for 15 min to fall asleep</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a sleep calculator with two modes: 1) I enter when I need to wake up and it shows best times to go to sleep, 2) I click 'sleep now' and it shows optimal wake times. Base calculations on 90-minute sleep cycles, add 15 minutes to fall asleep. Show 4-6 options with number of cycles and total sleep time."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Unit Converter -->
+        <!-- Unit Converter -->
         <div class="slide">
             <div class="app-slide productivity">
                 <div class="app-header">
@@ -676,39 +378,21 @@
                         <span class="app-category">Productivity</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Convert anything to anything. Weight, length, volume, temperature, cooking measurements. Essential for recipes, travel, and everyday math.
-                </p>
+                <p class="app-description">Convert weight, length, volume, temperature, and cooking measurements.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Length</h4>
-                        <p>Inches, feet, meters, miles, km</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Weight</h4>
-                        <p>Pounds, ounces, grams, kilograms</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Temperature</h4>
-                        <p>Fahrenheit, Celsius, Kelvin</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Cooking</h4>
-                        <p>Cups, tablespoons, ml, fluid oz</p>
-                    </div>
+                    <div class="feature"><h4>Length</h4><p>Inches, feet, meters, miles, km</p></div>
+                    <div class="feature"><h4>Weight</h4><p>Pounds, ounces, grams, kg</p></div>
+                    <div class="feature"><h4>Temperature</h4><p>Fahrenheit, Celsius, Kelvin</p></div>
+                    <div class="feature"><h4>Cooking</h4><p>Cups, tbsp, ml, fluid oz</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a unit converter with tabs for different categories: Length (in/ft/m/km/mi), Weight (oz/lb/g/kg), Volume (cup/tbsp/tsp/ml/L/fl oz), and Temperature (F/C/K). Enter a value in any unit and instantly see conversions to all other units in that category. Clean, simple interface."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Age Calculator -->
+        <!-- Age Calculator -->
         <div class="slide">
             <div class="app-slide productivity">
                 <div class="app-header">
@@ -718,39 +402,21 @@
                         <span class="app-category">Productivity</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    More than just years! Enter a birthdate and see exact age in years, months, days—even hours and minutes. Great for birthdays, anniversaries, and milestones.
-                </p>
+                <p class="app-description">Exact age in years, months, days—even hours and fun stats.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Exact Age</h4>
-                        <p>Years, months, days precise</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Fun Stats</h4>
-                        <p>Days lived, hours, heartbeats</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Next Birthday</h4>
-                        <p>Countdown to the big day</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Milestones</h4>
-                        <p>10,000 days, 1 billion seconds</p>
-                    </div>
+                    <div class="feature"><h4>Exact Age</h4><p>Years, months, days precise</p></div>
+                    <div class="feature"><h4>Fun Stats</h4><p>Days lived, hours, heartbeats</p></div>
+                    <div class="feature"><h4>Next Birthday</h4><p>Countdown to the big day</p></div>
+                    <div class="feature"><h4>Milestones</h4><p>10,000 days, 1 billion seconds</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create an age calculator. I enter a birthdate and see: exact age in years/months/days, total days lived, approximate hours lived, estimated heartbeats (~100,000/day). Show countdown to next birthday. List upcoming milestones like 10,000 days old or 1 billion seconds old with their dates."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Pomodoro Timer -->
+        <!-- Pomodoro Timer -->
         <div class="slide">
             <div class="app-slide productivity">
                 <div class="app-header">
@@ -760,39 +426,21 @@
                         <span class="app-category">Productivity</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Boost focus with the Pomodoro Technique. Work for 25 minutes, break for 5, repeat. After 4 rounds, take a longer break. Simple but powerful for productivity.
-                </p>
+                <p class="app-description">Focus with 25-minute work sessions and 5-minute breaks.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Work Timer</h4>
-                        <p>25-minute focused sessions</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Break Timer</h4>
-                        <p>5-minute short breaks</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Long Break</h4>
-                        <p>15-30 min after 4 pomodoros</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Sound Alert</h4>
-                        <p>Gentle notification when done</p>
-                    </div>
+                    <div class="feature"><h4>Work Timer</h4><p>25-minute focused sessions</p></div>
+                    <div class="feature"><h4>Break Timer</h4><p>5-minute short breaks</p></div>
+                    <div class="feature"><h4>Long Break</h4><p>15-30 min after 4 pomodoros</p></div>
+                    <div class="feature"><h4>Sound Alert</h4><p>Notification when done</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a Pomodoro timer. 25-minute work sessions, 5-minute short breaks, 15-minute long break after 4 pomodoros. Show a large countdown, start/pause/reset buttons, and current session count. Play a sound when timer ends. Let me customize work/break durations. Track total pomodoros completed today."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Daily Journal -->
+        <!-- Daily Journal -->
         <div class="slide">
             <div class="app-slide productivity">
                 <div class="app-header">
@@ -802,39 +450,21 @@
                         <span class="app-category">Productivity</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    A simple, private place to write daily thoughts. Each entry is dated automatically. Look back at what you wrote on any day. All saved locally in your browser.
-                </p>
+                <p class="app-description">Simple, private place to write daily thoughts. Saved locally.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Daily Entries</h4>
-                        <p>Auto-dated, just start writing</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Calendar View</h4>
-                        <p>Navigate to any past day</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Search</h4>
-                        <p>Find entries by keyword</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Private</h4>
-                        <p>Stored only on your device</p>
-                    </div>
+                    <div class="feature"><h4>Daily Entries</h4><p>Auto-dated, just start writing</p></div>
+                    <div class="feature"><h4>Calendar View</h4><p>Navigate to any past day</p></div>
+                    <div class="feature"><h4>Search</h4><p>Find entries by keyword</p></div>
+                    <div class="feature"><h4>Private</h4><p>Stored only on your device</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a daily journal app. Large text area for writing with today's date shown automatically. Calendar or date picker to navigate to past entries. Search box to find entries containing keywords. Autosave as I type. All data stored in localStorage, nothing sent to any server. Clean, distraction-free design."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Decision Maker -->
+        <!-- Decision Maker -->
         <div class="slide">
             <div class="app-slide productivity">
                 <div class="app-header">
@@ -844,39 +474,21 @@
                         <span class="app-category">Productivity</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Can't decide? Enter your options and let fate choose. Add weights if some options should be more likely. Spin the wheel and accept your destiny.
-                </p>
+                <p class="app-description">Can't decide? Enter options and let fate choose with a spinning wheel.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Add Options</h4>
-                        <p>Enter as many choices as you want</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Weighted Random</h4>
-                        <p>Some options more likely than others</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Spin Animation</h4>
-                        <p>Satisfying wheel spin effect</p>
-                    </div>
-                    <div class="feature">
-                        <h4>History</h4>
-                        <p>What did you pick last time?</p>
-                    </div>
+                    <div class="feature"><h4>Add Options</h4><p>Enter as many choices as you want</p></div>
+                    <div class="feature"><h4>Weighted Random</h4><p>Some options more likely</p></div>
+                    <div class="feature"><h4>Spin Animation</h4><p>Satisfying wheel spin effect</p></div>
+                    <div class="feature"><h4>History</h4><p>What did you pick last time?</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a decision maker with a spinning wheel. Add options as a list, each gets a slice of the wheel with a random color. Click to spin with realistic animation that slows down. Show the winner prominently. Option to add weights so some choices are more likely. Save history of past decisions."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Win: Meeting Cost Calculator -->
+        <!-- Meeting Cost Calculator -->
         <div class="slide">
             <div class="app-slide productivity">
                 <div class="app-header">
@@ -886,34 +498,16 @@
                         <span class="app-category">Productivity</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    How much does this meeting really cost? Enter attendees, their approximate salaries, and meeting duration. Watch the cost tick up in real-time. Sobering!
-                </p>
+                <p class="app-description">How much does this meeting really cost? Watch dollars tick up in real-time.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Attendee Count</h4>
-                        <p>How many people in the room?</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Salary Estimates</h4>
-                        <p>Average or per-person rates</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Live Counter</h4>
-                        <p>Watch dollars tick away</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Final Total</h4>
-                        <p>"This meeting cost $2,340"</p>
-                    </div>
+                    <div class="feature"><h4>Attendee Count</h4><p>How many people in the room?</p></div>
+                    <div class="feature"><h4>Salary Estimates</h4><p>Average or per-person rates</p></div>
+                    <div class="feature"><h4>Live Counter</h4><p>Watch dollars tick away</p></div>
+                    <div class="feature"><h4>Final Total</h4><p>"This meeting cost $2,340"</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a meeting cost calculator. Enter number of attendees and average hourly rate (or enter individual rates). Start button begins a timer showing meeting duration and running cost ticking up in real-time. Stop button shows final cost. Calculate based on hourly rates converted to per-second. Big, dramatic cost display."</p>
                 </div>
             </div>
         </div>
@@ -925,7 +519,7 @@
             <p class="subtitle">More features, more polish</p>
         </div>
 
-        <!-- Weekend: Compound Interest Visualizer -->
+        <!-- Compound Interest Visualizer -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -935,39 +529,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    See the magic of compound interest! Enter an initial amount, monthly contribution, and interest rate. Watch your money grow over 10, 20, 30 years on an interactive chart.
-                </p>
+                <p class="app-description">See the magic of compound interest with interactive charts over decades.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Initial Investment</h4>
-                        <p>Starting amount</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Monthly Contributions</h4>
-                        <p>Regular additions over time</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Growth Chart</h4>
-                        <p>Principal vs interest earned</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Time Slider</h4>
-                        <p>See growth at any point</p>
-                    </div>
+                    <div class="feature"><h4>Initial Investment</h4><p>Starting amount</p></div>
+                    <div class="feature"><h4>Monthly Contributions</h4><p>Regular additions</p></div>
+                    <div class="feature"><h4>Growth Chart</h4><p>Principal vs interest earned</p></div>
+                    <div class="feature"><h4>Time Slider</h4><p>See growth at any point</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a compound interest visualizer. Inputs: initial investment, monthly contribution, annual interest rate, and time period (years). Show an area chart with two colors: total contributions vs interest earned, so I can see how interest grows over time. Add a slider to scrub through years and see values at any point. Show final total prominently."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Mortgage Comparison -->
+        <!-- Mortgage Comparison -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -977,39 +553,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Should you get a 15-year or 30-year mortgage? Compare different loan terms, interest rates, and down payments side by side. See total interest paid over the life of each loan.
-                </p>
+                <p class="app-description">Compare 15 vs 30 year mortgages, different rates, see total interest paid.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Side-by-Side</h4>
-                        <p>Compare 2-3 scenarios at once</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Amortization</h4>
-                        <p>See principal vs interest over time</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Total Cost</h4>
-                        <p>Real cost including all interest</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Extra Payments</h4>
-                        <p>Impact of paying extra monthly</p>
-                    </div>
+                    <div class="feature"><h4>Side-by-Side</h4><p>Compare 2-3 scenarios</p></div>
+                    <div class="feature"><h4>Amortization</h4><p>Principal vs interest over time</p></div>
+                    <div class="feature"><h4>Total Cost</h4><p>Real cost including interest</p></div>
+                    <div class="feature"><h4>Extra Payments</h4><p>Impact of paying extra</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a mortgage comparison tool. Enter home price, down payment, interest rate, and loan term. Compare two scenarios side by side (e.g., 15 vs 30 year). Show monthly payment, total interest paid, and total cost. Include an amortization chart showing principal vs interest over time. Option to add extra monthly payment and see how it shortens the loan."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Tax Estimator -->
+        <!-- Tax Estimator -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1019,39 +577,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Get a rough idea of your income tax before filing. Enter income, filing status, and deductions to see which bracket you're in and approximate tax owed.
-                </p>
+                <p class="app-description">Get a rough idea of your income tax with bracket visualization.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Income Entry</h4>
-                        <p>Wages, investments, other income</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Deductions</h4>
-                        <p>Standard vs itemized</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Tax Brackets</h4>
-                        <p>Visual breakdown by bracket</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Effective Rate</h4>
-                        <p>Your real tax percentage</p>
-                    </div>
+                    <div class="feature"><h4>Income Entry</h4><p>Wages, investments, other</p></div>
+                    <div class="feature"><h4>Deductions</h4><p>Standard vs itemized</p></div>
+                    <div class="feature"><h4>Tax Brackets</h4><p>Visual breakdown by bracket</p></div>
+                    <div class="feature"><h4>Effective Rate</h4><p>Your real tax percentage</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a US income tax estimator. Enter gross income and filing status (single, married filing jointly, etc.). Show standard deduction or let me enter itemized amount. Display a visual breakdown of how income is taxed across brackets (10%, 12%, 22%, etc.). Show total tax owed and effective tax rate. Use 2024 tax brackets."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Investment Portfolio Pie -->
+        <!-- Investment Portfolio Pie -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1061,39 +601,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    See your asset allocation at a glance. Enter your holdings or upload a CSV, and get a beautiful pie chart showing stocks vs bonds vs cash vs real estate.
-                </p>
+                <p class="app-description">See your asset allocation at a glance with a beautiful pie chart.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Add Holdings</h4>
-                        <p>Name, value, category</p>
-                    </div>
-                    <div class="feature">
-                        <h4>CSV Upload</h4>
-                        <p>Import from brokerage export</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Pie Chart</h4>
-                        <p>Visual allocation breakdown</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Rebalance Calc</h4>
-                        <p>What to buy/sell to hit targets</p>
-                    </div>
+                    <div class="feature"><h4>Add Holdings</h4><p>Name, value, category</p></div>
+                    <div class="feature"><h4>CSV Upload</h4><p>Import from brokerage</p></div>
+                    <div class="feature"><h4>Pie Chart</h4><p>Visual allocation breakdown</p></div>
+                    <div class="feature"><h4>Rebalance Calc</h4><p>What to buy/sell to hit targets</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create an investment portfolio visualizer. Add holdings with name, value, and category (stocks, bonds, international, real estate, cash). Show a pie chart of allocation by category. Let me set target percentages for each category and show what I need to buy or sell to rebalance. Option to upload a CSV of holdings."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Currency Exchange -->
+        <!-- Currency Exchange -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1103,39 +625,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Plan international trips with confidence. Convert between currencies, see historical rates, and set alerts for when rates hit your target.
-                </p>
+                <p class="app-description">Convert currencies and see historical rates for travel planning.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Quick Convert</h4>
-                        <p>Any currency to any currency</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Historical Rates</h4>
-                        <p>Chart over past 30/90/365 days</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Favorites</h4>
-                        <p>Save your frequent pairs</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Rate Alerts</h4>
-                        <p>Notify when rate hits target</p>
-                    </div>
+                    <div class="feature"><h4>Quick Convert</h4><p>Any currency to any currency</p></div>
+                    <div class="feature"><h4>Historical Rates</h4><p>Chart over past 30/90/365 days</p></div>
+                    <div class="feature"><h4>Favorites</h4><p>Save frequent pairs</p></div>
+                    <div class="feature"><h4>Rate Alerts</h4><p>Notify when rate hits target</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a currency converter. Select from/to currencies from a dropdown of common currencies (USD, EUR, GBP, JPY, etc.). Fetch real-time rates from a free API. Show a line chart of historical rates for the past 30 days. Let me save favorite currency pairs. Store favorites in localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Recipe Scaler -->
+        <!-- Recipe Scaler -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1145,39 +649,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Recipe serves 4 but you need 7? Enter ingredients and original servings, then scale up or down. Handles fractions and converts units automatically.
-                </p>
+                <p class="app-description">Scale recipe ingredients up or down with smart unit conversion.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Ingredient List</h4>
-                        <p>Enter amounts and units</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Scale Slider</h4>
-                        <p>Drag to adjust servings</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Smart Fractions</h4>
-                        <p>Shows ½ not 0.5</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Unit Conversion</h4>
-                        <p>Auto-converts when sensible</p>
-                    </div>
+                    <div class="feature"><h4>Ingredient List</h4><p>Enter amounts and units</p></div>
+                    <div class="feature"><h4>Scale Slider</h4><p>Drag to adjust servings</p></div>
+                    <div class="feature"><h4>Smart Fractions</h4><p>Shows ½ not 0.5</p></div>
+                    <div class="feature"><h4>Unit Conversion</h4><p>Auto-converts when sensible</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a recipe scaler. Enter original servings and a list of ingredients with amounts (e.g., '2 cups flour', '1/2 tsp salt'). Slider or input to set desired servings. Scale all ingredients proportionally, showing nice fractions (½, ¼, ¾) instead of decimals. Auto-convert units when it makes sense (e.g., 4 tbsp → ¼ cup)."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Paint Calculator -->
+        <!-- Paint Calculator -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1187,39 +673,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Never buy too much (or too little) paint again. Enter room dimensions, subtract windows and doors, and get the exact gallons needed for your project.
-                </p>
+                <p class="app-description">Calculate exactly how many gallons of paint you need for a room.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Room Dimensions</h4>
-                        <p>Length, width, height</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Subtract Openings</h4>
-                        <p>Doors, windows, built-ins</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Coat Calculator</h4>
-                        <p>Primer + 1 or 2 coats</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Gallons Needed</h4>
-                        <p>Based on standard coverage</p>
-                    </div>
+                    <div class="feature"><h4>Room Dimensions</h4><p>Length, width, height</p></div>
+                    <div class="feature"><h4>Subtract Openings</h4><p>Doors, windows, built-ins</p></div>
+                    <div class="feature"><h4>Coat Calculator</h4><p>Primer + 1 or 2 coats</p></div>
+                    <div class="feature"><h4>Gallons Needed</h4><p>Based on standard coverage</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a paint calculator. Enter room dimensions (length, width, height). Subtract door and window openings (standard sizes or custom). Select number of coats (1 or 2) and whether primer is needed. Calculate total square footage and gallons needed based on 350 sq ft per gallon coverage. Round up to nearest gallon."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Moving Cost Estimator -->
+        <!-- Moving Cost Estimator -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1229,39 +697,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Planning a move? Get a ballpark estimate based on distance, home size, time of year, and whether you're DIY or hiring movers. Budget with confidence.
-                </p>
+                <p class="app-description">Budget for your move based on distance, home size, and timing.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Distance</h4>
-                        <p>Local vs long-distance rates</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Home Size</h4>
-                        <p>Studio to 5+ bedroom estimates</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Season Pricing</h4>
-                        <p>Summer premium, winter discount</p>
-                    </div>
-                    <div class="feature">
-                        <h4>DIY vs Pro</h4>
-                        <p>Compare truck rental to movers</p>
-                    </div>
+                    <div class="feature"><h4>Distance</h4><p>Local vs long-distance rates</p></div>
+                    <div class="feature"><h4>Home Size</h4><p>Studio to 5+ bedroom estimates</p></div>
+                    <div class="feature"><h4>Season Pricing</h4><p>Summer premium, winter discount</p></div>
+                    <div class="feature"><h4>DIY vs Pro</h4><p>Compare truck rental to movers</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a moving cost estimator. Select home size (studio, 1BR, 2BR, etc.), enter distance in miles, and select month of move. Estimate costs for: professional movers, DIY truck rental + help, and DIY truck rental only. Apply seasonal adjustments (summer is more expensive). Show breakdown of costs and comparison."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Plant Watering Schedule -->
+        <!-- Plant Watering Schedule -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1271,39 +721,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Keep your plants alive! Add your plants with their watering needs, and see a daily dashboard of what needs water today. Never over or under-water again.
-                </p>
+                <p class="app-description">Keep your plants alive with customized watering reminders.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Plant Library</h4>
-                        <p>Common plants with preset schedules</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Custom Plants</h4>
-                        <p>Set your own intervals</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Today's Tasks</h4>
-                        <p>What needs water now</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Check Off</h4>
-                        <p>Mark as watered, resets timer</p>
-                    </div>
+                    <div class="feature"><h4>Plant Library</h4><p>Common plants with presets</p></div>
+                    <div class="feature"><h4>Custom Plants</h4><p>Set your own intervals</p></div>
+                    <div class="feature"><h4>Today's Tasks</h4><p>What needs water now</p></div>
+                    <div class="feature"><h4>Check Off</h4><p>Mark as watered</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a plant watering tracker. Add plants with name, location, and watering interval in days. Include presets for common plants (succulent: 14 days, fern: 3 days, etc.). Dashboard shows which plants need water today and which are overdue. Mark plants as watered to reset their timer. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Gift Budget Tracker -->
+        <!-- Gift Budget Tracker -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1313,39 +745,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Survive the holidays without going broke. List everyone you're buying for, set budgets per person, track what you've bought, and see your running total.
-                </p>
+                <p class="app-description">Survive the holidays without going broke. Track gift budgets and purchases.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Gift List</h4>
-                        <p>Who you're buying for</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Per-Person Budget</h4>
-                        <p>Set limits for each recipient</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Purchase Tracking</h4>
-                        <p>Log what you've bought</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Running Total</h4>
-                        <p>Budget remaining at a glance</p>
-                    </div>
+                    <div class="feature"><h4>Gift List</h4><p>Who you're buying for</p></div>
+                    <div class="feature"><h4>Per-Person Budget</h4><p>Set limits for each recipient</p></div>
+                    <div class="feature"><h4>Purchase Tracking</h4><p>Log what you've bought</p></div>
+                    <div class="feature"><h4>Running Total</h4><p>Budget remaining at a glance</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a gift budget tracker. Add recipients with their name and budget. For each person, add gifts purchased with name, cost, and status (idea, bought, wrapped). Show per-person budget vs spent, and overall total budget vs spent. Visual progress bars. Highlight anyone over budget in red. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: BMI Dashboard -->
+        <!-- BMI Dashboard -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -1355,39 +769,21 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Track weight and measurements over time. See BMI, visualize trends with charts, and celebrate progress toward your goals.
-                </p>
+                <p class="app-description">Track weight and see BMI trends over time with charts.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Weight Log</h4>
-                        <p>Daily or weekly entries</p>
-                    </div>
-                    <div class="feature">
-                        <h4>BMI Calculator</h4>
-                        <p>With healthy range indicator</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Trend Chart</h4>
-                        <p>See progress over time</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Goal Tracking</h4>
-                        <p>How far to your target</p>
-                    </div>
+                    <div class="feature"><h4>Weight Log</h4><p>Daily or weekly entries</p></div>
+                    <div class="feature"><h4>BMI Calculator</h4><p>With healthy range indicator</p></div>
+                    <div class="feature"><h4>Trend Chart</h4><p>See progress over time</p></div>
+                    <div class="feature"><h4>Goal Tracking</h4><p>How far to your target</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a weight and BMI tracker. Enter height once, then log weight entries with date. Calculate and display BMI with colored indicator (underweight, normal, overweight, obese ranges). Line chart showing weight over time. Set a goal weight and show progress toward it. Save all data to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Calorie Counter -->
+        <!-- Calorie Counter -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -1397,39 +793,21 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Simple daily food logging without the complexity of big apps. Search foods, log meals, see your daily total. Includes common foods database.
-                </p>
+                <p class="app-description">Simple food logging with a built-in common foods database.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Food Search</h4>
-                        <p>Common foods with calories</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Meal Logging</h4>
-                        <p>Breakfast, lunch, dinner, snacks</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Daily Total</h4>
-                        <p>Running count vs goal</p>
-                    </div>
-                    <div class="feature">
-                        <h4>History</h4>
-                        <p>See past days at a glance</p>
-                    </div>
+                    <div class="feature"><h4>Food Search</h4><p>Common foods with calories</p></div>
+                    <div class="feature"><h4>Meal Logging</h4><p>Breakfast, lunch, dinner, snacks</p></div>
+                    <div class="feature"><h4>Daily Total</h4><p>Running count vs goal</p></div>
+                    <div class="feature"><h4>History</h4><p>See past days at a glance</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a simple calorie counter. Include a searchable database of ~100 common foods with calories per serving. Log foods to meals (breakfast, lunch, dinner, snacks). Show running daily total vs my goal. Let me add custom foods. View history by date. Progress bar for daily goal. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Exercise Tracker -->
+        <!-- Exercise Tracker -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -1439,39 +817,21 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Track your workouts! Log exercises, sets, reps, and weight. See your progress over time and never forget what you lifted last session.
-                </p>
+                <p class="app-description">Track workouts with sets, reps, and weight over time.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Exercise Library</h4>
-                        <p>Common exercises pre-loaded</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Sets & Reps</h4>
-                        <p>Quick logging with +/- buttons</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Weight Tracking</h4>
-                        <p>See strength gains over time</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Workout History</h4>
-                        <p>What did I do last Tuesday?</p>
-                    </div>
+                    <div class="feature"><h4>Exercise Library</h4><p>Common exercises pre-loaded</p></div>
+                    <div class="feature"><h4>Sets & Reps</h4><p>Quick logging with +/- buttons</p></div>
+                    <div class="feature"><h4>Weight Tracking</h4><p>See strength gains</p></div>
+                    <div class="feature"><h4>Workout History</h4><p>What did I do last time?</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build an exercise tracker. Pre-loaded list of common exercises (bench press, squat, deadlift, etc.) plus ability to add custom ones. For each workout, select exercises and log sets with reps and weight. Show last workout's numbers for comparison. Calendar view of workout history. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Weekend: Blood Pressure Log -->
+        <!-- Blood Pressure Log -->
         <div class="slide">
             <div class="app-slide health">
                 <div class="app-header">
@@ -1481,34 +841,16 @@
                         <span class="app-category">Health & Lifestyle</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Track readings to share with your doctor. Log systolic/diastolic, see trends over time, and know if you're in healthy, elevated, or high ranges.
-                </p>
+                <p class="app-description">Track readings with trend charts and exportable reports for your doctor.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Quick Entry</h4>
-                        <p>Systolic, diastolic, pulse</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Range Indicator</h4>
-                        <p>Color-coded healthy to high</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Trend Chart</h4>
-                        <p>See patterns over weeks/months</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Export</h4>
-                        <p>Print or PDF for doctor visits</p>
-                    </div>
+                    <div class="feature"><h4>Quick Entry</h4><p>Systolic, diastolic, pulse</p></div>
+                    <div class="feature"><h4>Range Indicator</h4><p>Color-coded healthy to high</p></div>
+                    <div class="feature"><h4>Trend Chart</h4><p>See patterns over time</p></div>
+                    <div class="feature"><h4>Export</h4><p>Print or PDF for doctor</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a blood pressure tracker. Enter systolic, diastolic, and pulse with date/time. Color-code each reading based on ranges (normal: green, elevated: yellow, high: orange/red). Line chart showing systolic and diastolic trends over time. Calculate averages. Export button to print or download as PDF. Save to localStorage."</p>
                 </div>
             </div>
         </div>
@@ -1520,7 +862,7 @@
             <p class="subtitle">Full-featured applications</p>
         </div>
 
-        <!-- Meaty: Full Budget Dashboard -->
+        <!-- Full Budget Dashboard -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1530,39 +872,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    The complete package! Import transactions, auto-categorize spending, see trends over time, set budgets by category, and get insights on where your money goes.
-                </p>
+                <p class="app-description">Complete package: import transactions, auto-categorize, set budgets, see trends.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>CSV Import</h4>
-                        <p>Upload bank statements</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Auto-Categorize</h4>
-                        <p>Smart transaction sorting</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Charts & Graphs</h4>
-                        <p>Pie, bar, line visualizations</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Budget Alerts</h4>
-                        <p>Warnings when over budget</p>
-                    </div>
+                    <div class="feature"><h4>CSV Import</h4><p>Upload bank statements</p></div>
+                    <div class="feature"><h4>Auto-Categorize</h4><p>Smart transaction sorting</p></div>
+                    <div class="feature"><h4>Charts & Graphs</h4><p>Pie, bar, line visualizations</p></div>
+                    <div class="feature"><h4>Budget Alerts</h4><p>Warnings when over budget</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a full budget dashboard. Upload CSV bank statements (date, description, amount columns). Auto-categorize transactions by keywords (e.g., 'Starbucks' → Dining). Manual category override. Pie chart of spending by category, bar chart comparing months, line chart of balance over time. Set monthly budgets per category and warn when exceeded."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Invoice Generator -->
+        <!-- Invoice Generator -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1572,39 +896,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Create professional invoices for freelance work. Add line items, calculate totals, include your logo, and export to PDF. Track paid vs unpaid.
-                </p>
+                <p class="app-description">Create professional invoices for freelance work with PDF export.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Professional Templates</h4>
-                        <p>Clean, modern designs</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Line Items</h4>
-                        <p>Description, rate, quantity</p>
-                    </div>
-                    <div class="feature">
-                        <h4>PDF Export</h4>
-                        <p>Ready to email to clients</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Payment Tracking</h4>
-                        <p>Mark paid, see outstanding</p>
-                    </div>
+                    <div class="feature"><h4>Professional Templates</h4><p>Clean, modern designs</p></div>
+                    <div class="feature"><h4>Line Items</h4><p>Description, rate, quantity</p></div>
+                    <div class="feature"><h4>PDF Export</h4><p>Ready to email to clients</p></div>
+                    <div class="feature"><h4>Payment Tracking</h4><p>Mark paid, see outstanding</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create an invoice generator. Enter my business info (name, address, logo). Add client info and line items (description, quantity, rate). Auto-calculate subtotal, tax, and total. Auto-number invoices. Preview invoice with professional styling. Export to PDF. Save client list and invoice history. Track paid vs unpaid status."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Debt Payoff Planner -->
+        <!-- Debt Payoff Planner -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1614,39 +920,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Get out of debt faster! Enter all your debts, and see snowball (smallest first) vs avalanche (highest interest) strategies compared. Visualize your debt-free date.
-                </p>
+                <p class="app-description">Compare snowball vs avalanche strategies and visualize your debt-free date.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Debt List</h4>
-                        <p>Balance, rate, minimum payment</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Snowball Strategy</h4>
-                        <p>Pay smallest balance first</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Avalanche Strategy</h4>
-                        <p>Pay highest interest first</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Payoff Timeline</h4>
-                        <p>When will you be debt-free?</p>
-                    </div>
+                    <div class="feature"><h4>Debt List</h4><p>Balance, rate, minimum payment</p></div>
+                    <div class="feature"><h4>Snowball Strategy</h4><p>Pay smallest balance first</p></div>
+                    <div class="feature"><h4>Avalanche Strategy</h4><p>Pay highest interest first</p></div>
+                    <div class="feature"><h4>Payoff Timeline</h4><p>When will you be debt-free?</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a debt payoff planner. Add debts with name, balance, interest rate, and minimum payment. Enter extra monthly payment amount. Compare snowball (smallest first) vs avalanche (highest interest) strategies side by side. Show payoff order, total interest paid, and debt-free date for each. Chart showing debt decreasing over time."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Side Hustle Tracker -->
+        <!-- Side Hustle Tracker -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1656,39 +944,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Juggling multiple income streams? Track earnings and hours across gigs to see your true hourly rate. Which hustle is actually worth your time?
-                </p>
+                <p class="app-description">Track multiple income streams and see your true hourly rate for each gig.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Multiple Gigs</h4>
-                        <p>Track several income sources</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Hours Logged</h4>
-                        <p>Time spent on each hustle</p>
-                    </div>
-                    <div class="feature">
-                        <h4>True Hourly Rate</h4>
-                        <p>Earnings ÷ hours = reality</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Tax Set-Aside</h4>
-                        <p>Auto-calculate tax reserve</p>
-                    </div>
+                    <div class="feature"><h4>Multiple Gigs</h4><p>Track several income sources</p></div>
+                    <div class="feature"><h4>Hours Logged</h4><p>Time spent on each hustle</p></div>
+                    <div class="feature"><h4>True Hourly Rate</h4><p>Earnings ÷ hours = reality</p></div>
+                    <div class="feature"><h4>Tax Set-Aside</h4><p>Auto-calculate tax reserve</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a side hustle tracker. Add multiple income sources/gigs. For each, log earnings and hours worked per entry. Calculate and display true hourly rate for each gig. Show monthly and yearly totals. Auto-calculate tax set-aside (customizable percentage). Compare gigs to see which is most profitable per hour."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Tax Document Organizer -->
+        <!-- Tax Document Organizer -->
         <div class="slide">
             <div class="app-slide finance">
                 <div class="app-header">
@@ -1698,39 +968,21 @@
                         <span class="app-category">Personal Finance</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Never scramble for tax documents again. A checklist of everything you need (W-2s, 1099s, receipts), with ability to upload or link to each document.
-                </p>
+                <p class="app-description">Checklist of tax documents with upload/link capability for each year.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Document Checklist</h4>
-                        <p>All standard tax forms</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Upload/Link</h4>
-                        <p>Attach files or URLs</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Status Tracking</h4>
-                        <p>Received, pending, N/A</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Year Archives</h4>
-                        <p>Keep previous years organized</p>
-                    </div>
+                    <div class="feature"><h4>Document Checklist</h4><p>All standard tax forms</p></div>
+                    <div class="feature"><h4>Upload/Link</h4><p>Attach files or URLs</p></div>
+                    <div class="feature"><h4>Status Tracking</h4><p>Received, pending, N/A</p></div>
+                    <div class="feature"><h4>Year Archives</h4><p>Keep previous years organized</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a tax document organizer. Pre-populated checklist of common documents (W-2, 1099s, 1098, etc.) with descriptions. Mark each as received, pending, or N/A. Notes field for each. Link to external URLs or note file locations. Separate sections by tax year. Progress indicator showing % complete. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Meal Planner -->
+        <!-- Meal Planner -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1740,39 +992,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Plan your week's meals and auto-generate a shopping list. Drag and drop recipes onto a weekly calendar, then get a consolidated ingredient list for the store.
-                </p>
+                <p class="app-description">Plan weekly meals and auto-generate a consolidated shopping list.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Recipe Library</h4>
-                        <p>Save your favorite meals</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Weekly Calendar</h4>
-                        <p>Drag meals to days</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Shopping List</h4>
-                        <p>Auto-generated from plan</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Portion Scaling</h4>
-                        <p>Adjust for family size</p>
-                    </div>
+                    <div class="feature"><h4>Recipe Library</h4><p>Save your favorite meals</p></div>
+                    <div class="feature"><h4>Weekly Calendar</h4><p>Drag meals to days</p></div>
+                    <div class="feature"><h4>Shopping List</h4><p>Auto-generated from plan</p></div>
+                    <div class="feature"><h4>Portion Scaling</h4><p>Adjust for family size</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a meal planner. Add recipes with name, servings, and ingredient list. Weekly calendar view where I drag/drop recipes onto days (breakfast, lunch, dinner). Auto-generate a shopping list from the week's meals, combining duplicate ingredients. Adjust servings when adding to calendar. Check off items while shopping."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Travel Packing List -->
+        <!-- Travel Packing List -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1782,39 +1016,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Never forget your toothbrush again. Enter your destination, duration, and activities, and get a customized packing list. Check items off as you pack.
-                </p>
+                <p class="app-description">Customized packing lists based on destination, duration, and activities.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Trip Details</h4>
-                        <p>Destination, dates, weather</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Activity-Based</h4>
-                        <p>Beach? Hiking? Business?</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Smart Lists</h4>
-                        <p>Clothes, toiletries, electronics</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Check Off</h4>
-                        <p>Mark packed items</p>
-                    </div>
+                    <div class="feature"><h4>Trip Details</h4><p>Destination, dates, weather</p></div>
+                    <div class="feature"><h4>Activity-Based</h4><p>Beach? Hiking? Business?</p></div>
+                    <div class="feature"><h4>Smart Lists</h4><p>Clothes, toiletries, electronics</p></div>
+                    <div class="feature"><h4>Check Off</h4><p>Mark packed items</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a packing list generator. Enter trip length (days), weather (hot/cold/mixed), and activities (beach, hiking, business, casual). Generate a smart packing list organized by category (clothes, toiletries, electronics, documents). Adjust quantities based on trip length. Check off items as I pack. Add custom items. Save lists for future trips."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Home Inventory -->
+        <!-- Home Inventory -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1824,39 +1040,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Catalog your possessions for insurance purposes. Room by room, add items with photos, values, and purchase dates. Essential if disaster strikes.
-                </p>
+                <p class="app-description">Catalog possessions for insurance with photos and values.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Room Organization</h4>
-                        <p>Kitchen, bedroom, garage...</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Photo Upload</h4>
-                        <p>Visual proof of ownership</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Value Tracking</h4>
-                        <p>Purchase price, current value</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Export Report</h4>
-                        <p>PDF for insurance claims</p>
-                    </div>
+                    <div class="feature"><h4>Room Organization</h4><p>Kitchen, bedroom, garage...</p></div>
+                    <div class="feature"><h4>Photo Upload</h4><p>Visual proof of ownership</p></div>
+                    <div class="feature"><h4>Value Tracking</h4><p>Purchase price, current value</p></div>
+                    <div class="feature"><h4>Export Report</h4><p>PDF for insurance claims</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a home inventory app. Organize items by room. For each item: name, description, purchase date, purchase price, estimated current value, and photo upload. Calculate total value per room and overall. Search and filter items. Export to PDF with photos for insurance documentation. Save to localStorage with images as base64."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Book/Movie Tracker -->
+        <!-- Book/Movie Tracker -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1866,39 +1064,21 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Your personal media diary. Track what you've read and watched, rate items, write notes, and get recommendations based on your history.
-                </p>
+                <p class="app-description">Personal media diary with ratings, notes, and statistics.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Search & Add</h4>
-                        <p>Find titles easily</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Status Tracking</h4>
-                        <p>Want to, reading, finished</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Ratings & Notes</h4>
-                        <p>Your personal reviews</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Statistics</h4>
-                        <p>Books/movies per year</p>
-                    </div>
+                    <div class="feature"><h4>Search & Add</h4><p>Find titles easily</p></div>
+                    <div class="feature"><h4>Status Tracking</h4><p>Want to, reading, finished</p></div>
+                    <div class="feature"><h4>Ratings & Notes</h4><p>Your personal reviews</p></div>
+                    <div class="feature"><h4>Statistics</h4><p>Books/movies per year</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a book and movie tracker. Add items with title, author/director, genre, and year. Set status (want to read/watch, in progress, finished). Add 1-5 star rating and notes after finishing. View items filtered by status. Stats dashboard: total count, by genre, by year, average rating. Search and sort functionality. Save to localStorage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meaty: Family Tree Builder -->
+        <!-- Family Tree Builder -->
         <div class="slide">
             <div class="app-slide home">
                 <div class="app-header">
@@ -1908,34 +1088,16 @@
                         <span class="app-category">Home & Life</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Map your family history visually. Add relatives with photos, birthdays, and relationships. See the whole family tree expand as you add generations.
-                </p>
+                <p class="app-description">Map your family history visually with photos and birthdays.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Add People</h4>
-                        <p>Name, dates, photos, notes</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Relationships</h4>
-                        <p>Parent, child, spouse, sibling</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Visual Tree</h4>
-                        <p>Interactive family diagram</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Birthday Reminders</h4>
-                        <p>Never forget grandma's birthday</p>
-                    </div>
+                    <div class="feature"><h4>Add People</h4><p>Name, dates, photos, notes</p></div>
+                    <div class="feature"><h4>Relationships</h4><p>Parent, child, spouse, sibling</p></div>
+                    <div class="feature"><h4>Visual Tree</h4><p>Interactive family diagram</p></div>
+                    <div class="feature"><h4>Birthday Reminders</h4><p>Never forget grandma's birthday</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a family tree builder. Add family members with name, birth date, death date (if applicable), photo, and notes. Define relationships (parent of, child of, spouse of). Display as a visual tree diagram that I can zoom and pan. Show upcoming birthdays. Click on a person to see their details and relationships. Save to localStorage."</p>
                 </div>
             </div>
         </div>
@@ -1943,11 +1105,11 @@
         <!-- SECTION: Retirement Specific -->
         <div class="slide center section-slide">
             <span class="section-badge badge-meaty">🏖️ Retirement Focused</span>
-            <h2>For Your Friend</h2>
+            <h2>For Retirement Planning</h2>
             <p class="subtitle">Managing money in retirement</p>
         </div>
 
-        <!-- Retirement: Social Security Optimizer -->
+        <!-- Social Security Optimizer -->
         <div class="slide">
             <div class="app-slide retirement">
                 <div class="app-header">
@@ -1957,39 +1119,21 @@
                         <span class="app-category">Retirement Planning</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    When should you claim? Compare benefits at 62, 67, and 70. See break-even points and total lifetime benefits under different scenarios.
-                </p>
+                <p class="app-description">Compare claiming at 62, 67, and 70 with break-even analysis.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Benefit Estimates</h4>
-                        <p>At different claim ages</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Break-Even Analysis</h4>
-                        <p>When does waiting pay off?</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Spousal Benefits</h4>
-                        <p>Coordinated claiming strategies</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Lifetime Total</h4>
-                        <p>Based on life expectancy</p>
-                    </div>
+                    <div class="feature"><h4>Benefit Estimates</h4><p>At different claim ages</p></div>
+                    <div class="feature"><h4>Break-Even Analysis</h4><p>When does waiting pay off?</p></div>
+                    <div class="feature"><h4>Spousal Benefits</h4><p>Coordinated strategies</p></div>
+                    <div class="feature"><h4>Lifetime Total</h4><p>Based on life expectancy</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a Social Security optimizer. Enter my full retirement age benefit amount (from SSA statement). Calculate benefits at 62, 67, and 70 with reductions/increases. Show break-even ages comparing early vs late claiming. Input life expectancy to see total lifetime benefits for each scenario. Chart comparing cumulative benefits over time."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Retirement: RMD Calculator -->
+        <!-- RMD Calculator -->
         <div class="slide">
             <div class="app-slide retirement">
                 <div class="app-header">
@@ -1999,39 +1143,21 @@
                         <span class="app-category">Retirement Planning</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Required Minimum Distributions from your IRA/401k. Enter your age and account balance to see this year's required withdrawal and future projections.
-                </p>
+                <p class="app-description">Required Minimum Distribution calculator for IRA/401k accounts.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Current Year RMD</h4>
-                        <p>Exactly what you must withdraw</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Future Projections</h4>
-                        <p>RMDs for coming years</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Multiple Accounts</h4>
-                        <p>IRA, 401k, inherited accounts</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Deadline Reminder</h4>
-                        <p>Don't miss the deadline!</p>
-                    </div>
+                    <div class="feature"><h4>Current Year RMD</h4><p>Exactly what you must withdraw</p></div>
+                    <div class="feature"><h4>Future Projections</h4><p>RMDs for coming years</p></div>
+                    <div class="feature"><h4>Multiple Accounts</h4><p>IRA, 401k, inherited</p></div>
+                    <div class="feature"><h4>Deadline Reminder</h4><p>Don't miss the deadline!</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create an RMD (Required Minimum Distribution) calculator. Enter my age and retirement account balances as of Dec 31 last year. Use the IRS Uniform Lifetime Table to calculate this year's RMD. Show RMD projections for the next 10 years assuming various growth rates. Highlight the December 31 deadline. Support multiple accounts."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Retirement: Healthcare Cost Estimator -->
+        <!-- Healthcare Cost Estimator -->
         <div class="slide">
             <div class="app-slide retirement">
                 <div class="app-header">
@@ -2041,39 +1167,21 @@
                         <span class="app-category">Retirement Planning</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Healthcare is the biggest retirement expense. Compare Medicare plans, supplements, and out-of-pocket costs to budget accurately.
-                </p>
+                <p class="app-description">Compare Medicare plans and estimate total healthcare costs.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Medicare Premiums</h4>
-                        <p>Parts A, B, D costs</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Supplement Comparison</h4>
-                        <p>Medigap vs Advantage</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Out-of-Pocket</h4>
-                        <p>Deductibles, copays, coinsurance</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Annual Estimate</h4>
-                        <p>Total healthcare budget</p>
-                    </div>
+                    <div class="feature"><h4>Medicare Premiums</h4><p>Parts A, B, D costs</p></div>
+                    <div class="feature"><h4>Supplement Comparison</h4><p>Medigap vs Advantage</p></div>
+                    <div class="feature"><h4>Out-of-Pocket</h4><p>Deductibles, copays</p></div>
+                    <div class="feature"><h4>Annual Estimate</h4><p>Total healthcare budget</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a Medicare cost estimator. Input age and income (for IRMAA calculations). Show base Medicare Part B and D premiums. Compare: Original Medicare + Medigap + Part D vs Medicare Advantage plans. Estimate annual out-of-pocket based on typical usage (low/medium/high). Calculate total annual healthcare cost for budgeting."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Retirement: Income Planner -->
+        <!-- Retirement Income Planner -->
         <div class="slide">
             <div class="app-slide retirement">
                 <div class="app-header">
@@ -2083,39 +1191,21 @@
                         <span class="app-category">Retirement Planning</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    See your complete income picture. Combine pension, Social Security, investments, and other sources to see your monthly cash flow in retirement.
-                </p>
+                <p class="app-description">Combine all income sources to see your monthly cash flow in retirement.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Income Sources</h4>
-                        <p>All streams in one view</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Monthly Cash Flow</h4>
-                        <p>Income vs expenses</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Tax Impact</h4>
-                        <p>After-tax income estimate</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Scenarios</h4>
-                        <p>What if pension changes?</p>
-                    </div>
+                    <div class="feature"><h4>Income Sources</h4><p>All streams in one view</p></div>
+                    <div class="feature"><h4>Monthly Cash Flow</h4><p>Income vs expenses</p></div>
+                    <div class="feature"><h4>Tax Impact</h4><p>After-tax income estimate</p></div>
+                    <div class="feature"><h4>Scenarios</h4><p>What if pension changes?</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a retirement income planner. Add income sources: Social Security (amount, start age), pension (amount, start age), investment withdrawals (account balance, withdrawal rate), part-time work. Add expected monthly expenses. Show monthly cash flow (income minus expenses) and whether sustainable. Estimate taxes on income. Allow what-if scenarios."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Retirement: Longevity Calculator -->
+        <!-- Longevity Calculator -->
         <div class="slide">
             <div class="app-slide retirement">
                 <div class="app-header">
@@ -2125,34 +1215,16 @@
                         <span class="app-category">Retirement Planning</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    The big question: will my money last? Run Monte Carlo simulations with different market conditions to see the probability your savings will outlive you.
-                </p>
+                <p class="app-description">Will your money last? Monte Carlo simulation of retirement scenarios.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Current Savings</h4>
-                        <p>Your starting nest egg</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Withdrawal Rate</h4>
-                        <p>How much you're spending</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Monte Carlo</h4>
-                        <p>1000 market simulations</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Success Rate</h4>
-                        <p>% chance money lasts</p>
-                    </div>
+                    <div class="feature"><h4>Current Savings</h4><p>Your starting nest egg</p></div>
+                    <div class="feature"><h4>Withdrawal Rate</h4><p>How much you're spending</p></div>
+                    <div class="feature"><h4>Monte Carlo</h4><p>1000 market simulations</p></div>
+                    <div class="feature"><h4>Success Rate</h4><p>% chance money lasts</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                        <div class="complexity-dot filled hard"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a retirement longevity calculator. Enter: portfolio balance, annual withdrawal amount, expected retirement length (years), and asset allocation (stocks/bonds %). Run a Monte Carlo simulation (1000 iterations) with historical return distributions. Show success rate (% of scenarios where money lasts). Display a fan chart showing range of outcomes. Suggest safe withdrawal rate."</p>
                 </div>
             </div>
         </div>
@@ -2164,7 +1236,7 @@
             <p class="subtitle">Because building should be enjoyable</p>
         </div>
 
-        <!-- Fun: Color Palette Generator -->
+        <!-- Color Palette Generator -->
         <div class="slide">
             <div class="app-slide fun">
                 <div class="app-header">
@@ -2174,39 +1246,21 @@
                         <span class="app-category">Fun & Creative</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Generate beautiful color schemes with one click. Get complementary, analogous, or triadic palettes. Copy hex codes for your projects.
-                </p>
+                <p class="app-description">Generate beautiful color schemes with one click and copy hex codes.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Random Palettes</h4>
-                        <p>Hit spacebar for new colors</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Color Theory</h4>
-                        <p>Complementary, triadic, etc.</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Copy Hex Codes</h4>
-                        <p>One-click copy to clipboard</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Save Favorites</h4>
-                        <p>Keep palettes you love</p>
-                    </div>
+                    <div class="feature"><h4>Random Palettes</h4><p>Hit spacebar for new colors</p></div>
+                    <div class="feature"><h4>Color Theory</h4><p>Complementary, triadic, etc.</p></div>
+                    <div class="feature"><h4>Copy Hex Codes</h4><p>One-click copy to clipboard</p></div>
+                    <div class="feature"><h4>Save Favorites</h4><p>Keep palettes you love</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a color palette generator. Display 5 colors as large swatches with hex codes. Spacebar generates a new random palette. Click a color to copy its hex code. Options for palette types: random, complementary, analogous, triadic. Lock individual colors while regenerating others. Save favorite palettes to localStorage. Export as CSS variables."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Fun: Lorem Ipsum Generator -->
+        <!-- Lorem Ipsum Generator -->
         <div class="slide">
             <div class="app-slide fun">
                 <div class="app-header">
@@ -2216,39 +1270,21 @@
                         <span class="app-category">Fun & Creative</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Placeholder text, but fun! Generate filler text in themes like pirates, cats, corporate jargon, or cooking. Way more entertaining than Latin.
-                </p>
+                <p class="app-description">Placeholder text in fun themes like pirates, cats, or corporate jargon.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Multiple Themes</h4>
-                        <p>Pirates, cats, hipster, bacon</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Length Control</h4>
-                        <p>Paragraphs, sentences, words</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Copy Button</h4>
-                        <p>Quick copy to clipboard</p>
-                    </div>
-                    <div class="feature">
-                        <h4>HTML Option</h4>
-                        <p>With or without &lt;p&gt; tags</p>
-                    </div>
+                    <div class="feature"><h4>Multiple Themes</h4><p>Pirates, cats, hipster, bacon</p></div>
+                    <div class="feature"><h4>Length Control</h4><p>Paragraphs, sentences, words</p></div>
+                    <div class="feature"><h4>Copy Button</h4><p>Quick copy to clipboard</p></div>
+                    <div class="feature"><h4>HTML Option</h4><p>With or without &lt;p&gt; tags</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a themed lorem ipsum generator. Themes: classic Latin, pirate speak, cat ipsum, corporate buzzwords, hipster, cooking/food. Select number of paragraphs (1-10). Options: include HTML &lt;p&gt; tags, start with 'Lorem ipsum'. Generate button creates text, copy button copies to clipboard. Make the themed text actually readable and funny."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Fun: Name Generator -->
+        <!-- Name Generator -->
         <div class="slide">
             <div class="app-slide fun">
                 <div class="app-header">
@@ -2258,39 +1294,21 @@
                         <span class="app-category">Fun & Creative</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Need a name? Generate baby names, business names, character names for stories, or fantasy names. Filter by origin, starting letter, or style.
-                </p>
+                <p class="app-description">Generate baby names, business names, character names, and more.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Categories</h4>
-                        <p>Baby, business, fantasy, pets</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Filters</h4>
-                        <p>Gender, origin, length</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Combinations</h4>
-                        <p>First + middle + last</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Save Favorites</h4>
-                        <p>Build a shortlist</p>
-                    </div>
+                    <div class="feature"><h4>Categories</h4><p>Baby, business, fantasy, pets</p></div>
+                    <div class="feature"><h4>Filters</h4><p>Gender, origin, length</p></div>
+                    <div class="feature"><h4>Combinations</h4><p>First + middle + last</p></div>
+                    <div class="feature"><h4>Save Favorites</h4><p>Build a shortlist</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a name generator with modes: baby names (filter by gender, origin, starting letter), fantasy character names (elf, dwarf, wizard styles), business names (industry-based), pet names. Generate 10 names at a time. Click heart to save favorites. For baby names, show meaning and origin. Include full name generator (first + middle + last)."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Fun: Countdown Timer -->
+        <!-- Countdown Timer -->
         <div class="slide">
             <div class="app-slide fun">
                 <div class="app-header">
@@ -2300,39 +1318,21 @@
                         <span class="app-category">Fun & Creative</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Count down to the things that matter. Vacation, retirement, birthday, wedding—see days, hours, minutes, and seconds ticking away with style.
-                </p>
+                <p class="app-description">Beautiful countdowns to vacation, retirement, birthday—anything important.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Multiple Events</h4>
-                        <p>Track several countdowns</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Beautiful Display</h4>
-                        <p>Days : Hours : Min : Sec</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Custom Themes</h4>
-                        <p>Colors for each event</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Share</h4>
-                        <p>Send countdown link to friends</p>
-                    </div>
+                    <div class="feature"><h4>Multiple Events</h4><p>Track several countdowns</p></div>
+                    <div class="feature"><h4>Beautiful Display</h4><p>Days : Hours : Min : Sec</p></div>
+                    <div class="feature"><h4>Custom Themes</h4><p>Colors for each event</p></div>
+                    <div class="feature"><h4>Share</h4><p>Send countdown link</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build an event countdown app. Add events with name, date/time, and color theme. Display countdowns in a beautiful card format showing days, hours, minutes, seconds (live updating). Option for a single full-screen countdown mode. Celebrate with confetti when countdown hits zero. Save events to localStorage. Share button copies a link."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Fun: Daily Affirmation -->
+        <!-- Daily Affirmation -->
         <div class="slide">
             <div class="app-slide fun">
                 <div class="app-header">
@@ -2342,39 +1342,21 @@
                         <span class="app-category">Fun & Creative</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Start each day with positivity. Display a random uplifting message, quote, or affirmation. Set it as your browser homepage for daily inspiration.
-                </p>
+                <p class="app-description">Random uplifting messages for daily inspiration. Great as homepage.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Random Messages</h4>
-                        <p>Different each refresh</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Categories</h4>
-                        <p>Motivation, calm, gratitude</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Beautiful Design</h4>
-                        <p>Clean, peaceful aesthetic</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Add Your Own</h4>
-                        <p>Personal affirmations</p>
-                    </div>
+                    <div class="feature"><h4>Random Messages</h4><p>Different each refresh</p></div>
+                    <div class="feature"><h4>Categories</h4><p>Motivation, calm, gratitude</p></div>
+                    <div class="feature"><h4>Beautiful Design</h4><p>Clean, peaceful aesthetic</p></div>
+                    <div class="feature"><h4>Add Your Own</h4><p>Personal affirmations</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled"></div>
-                        <div class="complexity-dot"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Create a daily affirmation app. Display one random affirmation in large, beautiful typography on a calming gradient background. Include 50+ built-in affirmations. Filter by category (motivation, gratitude, self-love, calm). Click for a new one. Add custom affirmations. Background color slowly shifts. Perfect for a browser homepage."</p>
                 </div>
             </div>
         </div>
 
-        <!-- Fun: Quiz Builder -->
+        <!-- Quiz Builder -->
         <div class="slide">
             <div class="app-slide fun">
                 <div class="app-header">
@@ -2384,34 +1366,16 @@
                         <span class="app-category">Fun & Creative</span>
                     </div>
                 </div>
-                <p class="app-description">
-                    Create fun quizzes to share with friends and family. Multiple choice, true/false, or personality quizzes. See results and compare scores.
-                </p>
+                <p class="app-description">Create and share fun quizzes with friends and family.</p>
                 <div class="app-features">
-                    <div class="feature">
-                        <h4>Question Types</h4>
-                        <p>Multiple choice, true/false</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Personality Style</h4>
-                        <p>"Which X are you?" quizzes</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Shareable Link</h4>
-                        <p>Send to friends</p>
-                    </div>
-                    <div class="feature">
-                        <h4>Results</h4>
-                        <p>Scores and comparisons</p>
-                    </div>
+                    <div class="feature"><h4>Question Types</h4><p>Multiple choice, true/false</p></div>
+                    <div class="feature"><h4>Personality Style</h4><p>"Which X are you?" quizzes</p></div>
+                    <div class="feature"><h4>Shareable Link</h4><p>Send to friends</p></div>
+                    <div class="feature"><h4>Results</h4><p>Scores and comparisons</p></div>
                 </div>
-                <div class="complexity">
-                    <span>Complexity:</span>
-                    <div class="complexity-dots">
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot filled medium"></div>
-                        <div class="complexity-dot"></div>
-                    </div>
+                <div class="prompt-box">
+                    <div class="prompt-box-header">💬 Prompt for Claude</div>
+                    <p class="prompt-text">"Build a quiz builder and taker. Create mode: add questions with multiple choice answers, mark correct answer. Take mode: display questions one at a time, show score at end. Include personality quiz mode (answers add points to different outcomes, show result with highest points). Generate shareable link with quiz data encoded in URL. Fun, colorful design."</p>
                 </div>
             </div>
         </div>
@@ -2419,13 +1383,13 @@
         <!-- Closing Slide -->
         <div class="slide center title-slide">
             <h1>Start Building!</h1>
-            <p class="subtitle">Pick one idea and describe it to Claude</p>
-            <div style="margin-top: 50px; max-width: 600px;">
-                <p style="color: var(--text-muted); font-size: 0.95em; line-height: 1.6;">
-                    The best way to learn is to build something you'll actually use. Start small, iterate often, and don't be afraid to ask for changes.
+            <p class="subtitle">Copy a prompt and paste it into Claude</p>
+            <div style="margin-top: 40px; max-width: 600px;">
+                <p style="color: var(--text-muted); font-size: 0.9em; line-height: 1.6;">
+                    Start small, iterate often, and don't be afraid to ask for changes. Each prompt is just a starting point—make it your own!
                 </p>
             </div>
-            <div style="margin-top: 40px; font-size: 1.1em;">
+            <div style="margin-top: 35px; font-size: 1.1em;">
                 🚀 <strong>claude.ai</strong>
             </div>
         </div>
@@ -2449,13 +1413,10 @@
         function showSlide(index) {
             if (index < 0) index = 0;
             if (index >= slides.length) index = slides.length - 1;
-
             slides.forEach(slide => slide.classList.remove('active'));
             slides[index].classList.add('active');
             currentSlide = index;
-
-            const progressPercent = ((index + 1) / slides.length) * 100;
-            progress.style.width = progressPercent + '%';
+            progress.style.width = ((index + 1) / slides.length) * 100 + '%';
             counter.textContent = (index + 1) + ' / ' + slides.length;
         }
 
@@ -2463,19 +1424,10 @@
         function prevSlide() { showSlide(currentSlide - 1); }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                prevSlide();
-            } else if (e.key === 'Home') {
-                e.preventDefault();
-                showSlide(0);
-            } else if (e.key === 'End') {
-                e.preventDefault();
-                showSlide(slides.length - 1);
-            }
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+            else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+            else if (e.key === 'End') { e.preventDefault(); showSlide(slides.length - 1); }
         });
 
         let touchStartX = 0;
