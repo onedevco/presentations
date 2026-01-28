@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Structural Shift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0b;
+      --bg-card: #111113;
+      --bg-subtle: #18181b;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent-amber: #f59e0b;
+      --accent-amber-dim: rgba(245, 158, 11, 0.15);
+      --accent-emerald: #10b981;
+      --accent-emerald-dim: rgba(16, 185, 129, 0.15);
+      --accent-blue: #3b82f6;
+      --accent-purple: #a855f7;
+      --border: #27272a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .presentation {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 8rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 2rem;
+      left: 8rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 4.5rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 3.5rem;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      max-width: 700px;
+    }
+
+    p {
+      font-size: 1.35rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 800px;
+    }
+
+    .highlight {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .highlight-amber {
+      color: var(--accent-amber);
+    }
+
+    .highlight-emerald {
+      color: var(--accent-emerald);
+    }
+
+    .highlight-blue {
+      color: var(--accent-blue);
+    }
+
+    .highlight-purple {
+      color: var(--accent-purple);
+    }
+
+    /* Title Slide */
+    .slide-title {
+      justify-content: flex-end;
+      padding-bottom: 8rem;
+    }
+
+    .slide-title h1 {
+      font-size: 6rem;
+    }
+
+    .slide-title .meta {
+      margin-top: 3rem;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Section Title */
+    .slide-section {
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .slide-section h2 {
+      font-size: 4rem;
+    }
+
+    .slide-section .section-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      color: var(--accent-emerald);
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* Quote Slide */
+    .slide-quote {
+      text-align: center;
+      padding: 4rem;
+    }
+
+    .slide-quote blockquote {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3.5rem;
+      font-style: italic;
+      line-height: 1.3;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .slide-quote cite {
+      display: block;
+      margin-top: 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-size: 1.125rem;
+      color: var(--text-muted);
+    }
+
+    /* Comparison Cards */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2rem;
+    }
+
+    .card-amber {
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .card-emerald {
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .card-blue {
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .card-purple {
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .card h4 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .card h4::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .card-amber h4::before {
+      background: var(--accent-amber);
+    }
+
+    .card-emerald h4::before {
+      background: var(--accent-emerald);
+    }
+
+    .card-blue h4::before {
+      background: var(--accent-blue);
+    }
+
+    .card-purple h4::before {
+      background: var(--accent-purple);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+    }
+
+    .stat-value-amber {
+      color: var(--accent-amber);
+    }
+
+    .stat-value-emerald {
+      color: var(--accent-emerald);
+    }
+
+    /* Bar visualization */
+    .bar-container {
+      margin: 1.5rem 0;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .bar {
+      height: 8px;
+      background: var(--bg-subtle);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .bar-fill-amber {
+      background: linear-gradient(90deg, var(--accent-amber), #fbbf24);
+    }
+
+    .bar-fill-emerald {
+      background: linear-gradient(90deg, var(--accent-emerald), #34d399);
+    }
+
+    /* List Slide */
+    .point-list {
+      list-style: none;
+      margin-top: 2rem;
+    }
+
+    .point-list li {
+      font-size: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .point-list li:last-child {
+      border-bottom: none;
+    }
+
+    .point-list li strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .point-list-compact li {
+      font-size: 1.2rem;
+      padding: 0.75rem 0;
+    }
+
+    /* Big Number */
+    .big-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8rem;
+      font-weight: 500;
+      line-height: 1;
+      margin: 1rem 0;
+    }
+
+    .big-number-amber {
+      color: var(--accent-amber);
+    }
+
+    .big-number-emerald {
+      color: var(--accent-emerald);
+    }
+
+    /* Two Column Layout */
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .column p {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Three Column Layout */
+    .three-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* Cost Breakdown */
+    .cost-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cost-item:last-child {
+      border-bottom: none;
+    }
+
+    .cost-bar {
+      flex: 1;
+      height: 2rem;
+      background: var(--bg-subtle);
+      border-radius: 0.25rem;
+      overflow: hidden;
+    }
+
+    .cost-bar-fill {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--bg-dark);
+      font-weight: 500;
+    }
+
+    .cost-bar-visible {
+      background: var(--accent-amber);
+    }
+
+    .cost-bar-hidden {
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(245, 158, 11, 0.4),
+        rgba(245, 158, 11, 0.4) 10px,
+        rgba(245, 158, 11, 0.2) 10px,
+        rgba(245, 158, 11, 0.2) 20px
+      );
+      color: var(--accent-amber);
+    }
+
+    .cost-label {
+      width: 180px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .cost-value {
+      width: 100px;
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-amber);
+    }
+
+    /* Tier Cards */
+    .tier-card {
+      background: var(--bg-card);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      height: 100%;
+    }
+
+    .tier-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .tier-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .tier-description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .tier-examples {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .tier-examples span {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      padding: 0.25rem 0;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      margin-top: 2rem;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent-emerald), var(--accent-blue), var(--accent-purple));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 1rem 0 2rem 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 1.25rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      border: 2px solid var(--accent-emerald);
+    }
+
+    .timeline-item:nth-child(2)::before {
+      border-color: var(--accent-blue);
+    }
+
+    .timeline-item:nth-child(3)::before {
+      border-color: var(--accent-purple);
+    }
+
+    .timeline-phase {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent-emerald);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .timeline-item:nth-child(2) .timeline-phase {
+      color: var(--accent-blue);
+    }
+
+    .timeline-item:nth-child(3) .timeline-phase {
+      color: var(--accent-purple);
+    }
+
+    .timeline-title {
+      font-size: 1.35rem;
+      margin: 0.5rem 0;
+      color: var(--text-primary);
+    }
+
+    .timeline-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Stack Diagram */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .stack-layer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: var(--bg-card);
+      border-radius: 0.5rem;
+      border-left: 3px solid var(--border);
+    }
+
+    .stack-layer-locked {
+      border-left-color: var(--accent-amber);
+      opacity: 0.7;
+    }
+
+    .stack-layer-opportunity {
+      border-left-color: var(--accent-emerald);
+    }
+
+    .stack-label {
+      font-size: 1rem;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .stack-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+    }
+
+    .stack-status-locked {
+      background: var(--accent-amber-dim);
+      color: var(--accent-amber);
+    }
+
+    .stack-status-opportunity {
+      background: var(--accent-emerald-dim);
+      color: var(--accent-emerald);
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      bottom: 2rem;
+      right: 4rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 100;
+    }
+
+    .nav button {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .nav button:hover {
+      background: var(--bg-subtle);
+      border-color: var(--text-muted);
+    }
+
+    .nav button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Progress bar */
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent-emerald);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    /* Decorative elements */
+    .accent-line {
+      width: 60px;
+      height: 3px;
+      background: var(--accent-emerald);
+      margin-bottom: 2rem;
+    }
+
+    .accent-line-blue {
+      background: var(--accent-blue);
+    }
+
+    .grid-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .slide {
+        padding: 3rem 4rem;
+      }
+      h1 { font-size: 3.5rem; }
+      h2 { font-size: 2.5rem; }
+      .slide-title h1 { font-size: 4rem; }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .two-column { grid-template-columns: 1fr; gap: 2rem; }
+      .three-column { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation">
+    <div class="progress" id="progress"></div>
+    <div class="grid-bg"></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide slide-title active" data-slide="1">
+      <div class="accent-line"></div>
+      <h1>The Structural Shift</h1>
+      <p class="subtitle">Why the economics of software have permanently changed—and what it means for your business</p>
+      <div class="meta">2025 · Software Strategy Briefing</div>
+      <div class="slide-number">01</div>
+    </div>
+
+    <!-- Slide 2: The Old Calculus -->
+    <div class="slide" data-slide="2">
+      <h3>For three decades</h3>
+      <h2>The calculus was simple</h2>
+      <div class="comparison-grid">
+        <div class="card card-amber">
+          <h4>Buy Generic Software</h4>
+          <div class="stat-row">
+            <span class="stat-label">Cost</span>
+            <span class="stat-value stat-value-amber">£2k/month</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-label">
+              <span>Business fit</span>
+              <span class="stat-value-amber">~60%</span>
+            </div>
+            <div class="bar">
+              <div class="bar-fill bar-fill-amber" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Time to value</span>
+            <span class="stat-value">Weeks</span>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Build Custom</h4>
+          <div class="stat-row">
+            <span class="stat-label">Cost</span>
+            <span class="stat-value" style="color: #ef4444;">£200k+</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-label">
+              <span>Business fit</span>
+              <span style="color: var(--text-muted)">~95%</span>
+            </div>
+            <div class="bar">
+              <div class="bar-fill" style="width: 95%; background: var(--text-muted)"></div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Time to value</span>
+            <span class="stat-value">12-18 months</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 2rem; font-style: italic;">The rational choice: accept 60% fit. Adapt your processes to the software.</p>
+      <div class="slide-number">02</div>
+    </div>
+
+    <!-- Slide 3: The Inversion -->
+    <div class="slide" data-slide="3">
+      <h3>2024-2025</h3>
+      <h2>That calculus has collapsed</h2>
+      <div class="comparison-grid">
+        <div class="card" style="opacity: 0.5;">
+          <h4>Generic SaaS</h4>
+          <div class="stat-row">
+            <span class="stat-label">Cost</span>
+            <span class="stat-value" style="text-decoration: line-through;">£2k/month</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-label">
+              <span>Business fit</span>
+              <span>Still ~60%</span>
+            </div>
+            <div class="bar">
+              <div class="bar-fill" style="width: 60%; background: var(--text-muted)"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-emerald">
+          <h4>AI-Assisted Bespoke</h4>
+          <div class="stat-row">
+            <span class="stat-label">Cost</span>
+            <span class="stat-value stat-value-emerald">£5-15k</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-label">
+              <span>Business fit</span>
+              <span class="stat-value-emerald">~95%</span>
+            </div>
+            <div class="bar">
+              <div class="bar-fill bar-fill-emerald" style="width: 95%"></div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Time to value</span>
+            <span class="stat-value stat-value-emerald">Days to weeks</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 2rem;"><span class="highlight">The new choice:</span> Build exactly what you need. Iterate as you learn.</p>
+      <div class="slide-number">03</div>
+    </div>
+
+    <!-- Slide 4: Quote -->
+    <div class="slide slide-quote" data-slide="4">
+      <blockquote>"Your SaaS subscription is your technical debt"</blockquote>
+      <cite>Every month you pay for 60% fit, you accumulate process debt—workarounds, manual steps, compromises.</cite>
+      <div class="slide-number">04</div>
+    </div>
+
+    <!-- Slide 5: Hidden Costs -->
+    <div class="slide" data-slide="5">
+      <h3>The true cost of "cheap"</h3>
+      <h2>What generic software actually costs</h2>
+      <div style="margin-top: 2rem; max-width: 800px;">
+        <div class="cost-item">
+          <span class="cost-label">Subscription fees</span>
+          <div class="cost-bar">
+            <div class="cost-bar-fill cost-bar-visible" style="width: 14%;">Visible</div>
+          </div>
+          <span class="cost-value">£24k/yr</span>
+        </div>
+        <div class="cost-item">
+          <span class="cost-label">Process workarounds</span>
+          <div class="cost-bar">
+            <div class="cost-bar-fill cost-bar-hidden" style="width: 23%;"></div>
+          </div>
+          <span class="cost-value">£40k/yr</span>
+        </div>
+        <div class="cost-item">
+          <span class="cost-label">Manual data handling</span>
+          <div class="cost-bar">
+            <div class="cost-bar-fill cost-bar-hidden" style="width: 20%;"></div>
+          </div>
+          <span class="cost-value">£35k/yr</span>
+        </div>
+        <div class="cost-item">
+          <span class="cost-label">Integration middleware</span>
+          <div class="cost-bar">
+            <div class="cost-bar-fill cost-bar-hidden" style="width: 9%;"></div>
+          </div>
+          <span class="cost-value">£15k/yr</span>
+        </div>
+        <div class="cost-item">
+          <span class="cost-label">Training on limitations</span>
+          <div class="cost-bar">
+            <div class="cost-bar-fill cost-bar-hidden" style="width: 7%;"></div>
+          </div>
+          <span class="cost-value">£12k/yr</span>
+        </div>
+        <div class="cost-item">
+          <span class="cost-label">Missed opportunities</span>
+          <div class="cost-bar">
+            <div class="cost-bar-fill cost-bar-hidden" style="width: 27%;"></div>
+          </div>
+          <span class="cost-value">£50k+/yr</span>
+        </div>
+      </div>
+      <p style="margin-top: 2rem;">True annual cost: <span class="highlight-amber" style="font-family: 'JetBrains Mono'; font-size: 1.5rem;">£176k+</span></p>
+      <div class="slide-number">05</div>
+    </div>
+
+    <!-- Slide 6: The Comparison -->
+    <div class="slide" data-slide="6">
+      <h3>Three-year total cost of ownership</h3>
+      <h2>The numbers speak</h2>
+      <div class="two-column" style="margin-top: 3rem;">
+        <div>
+          <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Generic SaaS (true cost)</p>
+          <div class="big-number big-number-amber">£528k</div>
+          <p style="font-size: 1.1rem;">Still 60% fit after three years</p>
+        </div>
+        <div>
+          <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Bespoke solution</p>
+          <div class="big-number big-number-emerald">£33k</div>
+          <p style="font-size: 1.1rem;">95% fit and improving with every iteration</p>
+        </div>
+      </div>
+      <div class="slide-number">06</div>
+    </div>
+
+    <!-- Slide 7: What Survives -->
+    <div class="slide" data-slide="7">
+      <h3>Not everything is disrupted</h3>
+      <h2>What remains defensible</h2>
+      <ul class="point-list">
+        <li><strong>Platforms & Infrastructure</strong> — AWS, Stripe, databases. Genuine complexity you don't want to own.</li>
+        <li><strong>Network Effects</strong> — Marketplaces, social platforms. The value is in the connections.</li>
+        <li><strong>Data Moats</strong> — Proprietary datasets, trained models. Temporarily defensible.</li>
+        <li><strong>Regulated Industries</strong> — Where the cost of getting it wrong is catastrophic. Slower to move.</li>
+      </ul>
+      <div class="slide-number">07</div>
+    </div>
+
+    <!-- Slide 8: Extinction Event -->
+    <div class="slide" data-slide="8">
+      <h3>The generalist middle market</h3>
+      <h2>An extinction event</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>Software that's <span class="highlight">good enough for most</span> but <span class="highlight">perfect for none</span> is losing its reason to exist.</p>
+          <p>Component libraries. Project management tools. CRMs. ERPs. Booking systems. Inventory management.</p>
+          <p>Anything where businesses have been <span class="highlight-amber">forcing their processes into software-shaped boxes.</span></p>
+        </div>
+        <div>
+          <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1rem;">Threatened categories:</p>
+          <ul class="point-list" style="margin-top: 0;">
+            <li>Visual component libraries</li>
+            <li>Generic CRM platforms</li>
+            <li>Project management tools</li>
+            <li>Workflow automation</li>
+            <li>Business intelligence dashboards</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-number">08</div>
+    </div>
+
+    <!-- Slide 9: Death of Specification -->
+    <div class="slide slide-quote" data-slide="9">
+      <blockquote>"The death of the specification"</blockquote>
+      <cite>When generating a feature costs less than precisely specifying it, the entire approach to software delivery inverts. You don't write requirements then build—you build, react, iterate.</cite>
+      <div class="slide-number">09</div>
+    </div>
+
+    <!-- Slide 10: The Scarce Resource -->
+    <div class="slide" data-slide="10">
+      <h3>What's valuable now</h3>
+      <h2>The scarce resource has shifted</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div class="card card-amber" style="opacity: 0.6;">
+          <h4>Old Scarcity</h4>
+          <p style="font-size: 1.1rem;">Ability to build software</p>
+          <p style="font-size: 1.1rem; margin-top: 1rem;">Developer time. Technical expertise. Implementation capacity.</p>
+        </div>
+        <div class="card card-emerald">
+          <h4>New Scarcity</h4>
+          <p style="font-size: 1.1rem;">Knowing what to build</p>
+          <p style="font-size: 1.1rem; margin-top: 1rem;">Domain expertise. Business understanding. Iteration instinct.</p>
+        </div>
+      </div>
+      <p style="margin-top: 2rem;">Every business now has access to essentially unlimited development capacity—but most have no idea how to wield it.</p>
+      <div class="slide-number">10</div>
+    </div>
+
+    <!-- Slide 11: The Window -->
+    <div class="slide" data-slide="11">
+      <h3>Timing matters</h3>
+      <h2>The opportunity window</h2>
+      <p style="margin-bottom: 2rem;">There's a window of <span class="highlight-emerald">18-36 months</span> while established businesses are still processing what's happening.</p>
+      <ul class="point-list">
+        <li>Enterprises still thinking in <strong>requirements documents and RFPs</strong></li>
+        <li>Traditional consultants still selling <strong>waterfall implementations</strong></li>
+        <li>Procurement teams still evaluating <strong>last decade's criteria</strong></li>
+        <li>Most businesses <strong>don't have anyone who thinks this way</strong> internally</li>
+      </ul>
+      <div class="slide-number">11</div>
+    </div>
+
+    <!-- Slide 12: Last Generation -->
+    <div class="slide slide-quote" data-slide="12">
+      <blockquote>"The last generation of software companies"</blockquote>
+      <cite>We're not going to see another Salesforce, another HubSpot built the traditional way. The VC playbook of massive upfront investment for generic software—that playbook is closing.</cite>
+      <div class="slide-number">12</div>
+    </div>
+
+    <!-- ==================== NEW SECTION: STRATEGIC ADVANTAGE ==================== -->
+
+    <!-- Slide 13: Section Break -->
+    <div class="slide slide-section" data-slide="13">
+      <div class="accent-line accent-line-blue"></div>
+      <div class="section-number">PART II</div>
+      <h2>From Cost Reduction<br/>to Strategic Advantage</h2>
+      <p class="subtitle" style="margin-top: 1rem;">A framework for financial services</p>
+      <div class="slide-number">13</div>
+    </div>
+
+    <!-- Slide 14: Beyond Cost -->
+    <div class="slide" data-slide="14">
+      <h3>The wrong conversation</h3>
+      <h2>This is not about cost reduction</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>The instinctive response: <span class="highlight-amber">"We can save money on SaaS"</span> or <span class="highlight-amber">"We can reduce headcount."</span></p>
+          <p style="margin-top: 1.5rem;">This misses the point entirely. Cost reduction is a side effect. The real opportunity is <span class="highlight-emerald">strategic differentiation</span>—doing things your competitors cannot do.</p>
+        </div>
+        <div class="card card-emerald">
+          <h4>The Strategic Question</h4>
+          <p style="font-size: 1.1rem; line-height: 1.6;">What becomes possible when you can build exactly what you need, in days instead of years, and change it whenever the market demands?</p>
+        </div>
+      </div>
+      <div class="slide-number">14</div>
+    </div>
+
+    <!-- Slide 15: Financial Services Context -->
+    <div class="slide" data-slide="15">
+      <h3>The financial services reality</h3>
+      <h2>Locked into your stack</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>Financial services firms are particularly constrained. Regulatory requirements mandate certain systems. Core platforms are deeply embedded. Change is expensive and risky.</p>
+          <p style="margin-top: 1rem;">But this creates a <span class="highlight-emerald">false perception</span> that nothing can change.</p>
+        </div>
+        <div class="stack">
+          <div class="stack-layer stack-layer-locked">
+            <span class="stack-label">Core Banking / Trading Systems</span>
+            <span class="stack-status stack-status-locked">Locked</span>
+          </div>
+          <div class="stack-layer stack-layer-locked">
+            <span class="stack-label">Regulatory Reporting Infrastructure</span>
+            <span class="stack-status stack-status-locked">Locked</span>
+          </div>
+          <div class="stack-layer stack-layer-opportunity">
+            <span class="stack-label">Client Experience Layer</span>
+            <span class="stack-status stack-status-opportunity">Opportunity</span>
+          </div>
+          <div class="stack-layer stack-layer-opportunity">
+            <span class="stack-label">Internal Workflow Tools</span>
+            <span class="stack-status stack-status-opportunity">Opportunity</span>
+          </div>
+          <div class="stack-layer stack-layer-opportunity">
+            <span class="stack-label">Data Analysis & Intelligence</span>
+            <span class="stack-status stack-status-opportunity">Opportunity</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">15</div>
+    </div>
+
+    <!-- Slide 16: Three Levels -->
+    <div class="slide" data-slide="16">
+      <h3>A framework for action</h3>
+      <h2>Three levels of advantage</h2>
+      <div class="three-column" style="margin-top: 2rem;">
+        <div class="tier-card" style="border-color: rgba(16, 185, 129, 0.3);">
+          <div class="tier-label" style="color: var(--accent-emerald);">Level One</div>
+          <div class="tier-title">Tactical</div>
+          <div class="tier-description">Quick wins. Replace point solutions. Eliminate obvious friction.</div>
+          <div class="tier-examples">
+            <span>→ Weeks to value</span>
+            <span>→ Low risk</span>
+            <span>→ Immediate ROI</span>
+          </div>
+        </div>
+        <div class="tier-card" style="border-color: rgba(59, 130, 246, 0.3);">
+          <div class="tier-label" style="color: var(--accent-blue);">Level Two</div>
+          <div class="tier-title">Operational</div>
+          <div class="tier-description">Transform workflows. Redesign how work actually gets done.</div>
+          <div class="tier-examples">
+            <span>→ Months to value</span>
+            <span>→ Moderate complexity</span>
+            <span>→ Compounding returns</span>
+          </div>
+        </div>
+        <div class="tier-card" style="border-color: rgba(168, 85, 247, 0.3);">
+          <div class="tier-label" style="color: var(--accent-purple);">Level Three</div>
+          <div class="tier-title">Strategic</div>
+          <div class="tier-description">Create new capabilities. Do things competitors cannot do.</div>
+          <div class="tier-examples">
+            <span>→ Quarters to value</span>
+            <span>→ Highest impact</span>
+            <span>→ Durable advantage</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">16</div>
+    </div>
+
+    <!-- Slide 17: Level One - Tactical -->
+    <div class="slide" data-slide="17">
+      <div class="tier-label" style="color: var(--accent-emerald); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; letter-spacing: 0.1em;">LEVEL ONE · TACTICAL</div>
+      <h2>Replace the pain points</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>Every firm has tools that everyone hates but tolerates. Generic CRMs that don't match your sales process. Reporting tools that require hours of manual formatting. Spreadsheets doing jobs that need applications.</p>
+          <p style="margin-top: 1rem;"><span class="highlight-emerald">These can be replaced in days.</span></p>
+        </div>
+        <div>
+          <ul class="point-list point-list-compact" style="margin-top: 0;">
+            <li><strong>Client meeting prep tools</strong> — Auto-populated with holdings, recent activity, market context</li>
+            <li><strong>Internal dashboards</strong> — Exactly the metrics you need, not what the vendor decided</li>
+            <li><strong>Document generation</strong> — Client reports, proposals, compliance docs</li>
+            <li><strong>Fee calculators</strong> — Your fee structures, not generic approximations</li>
+            <li><strong>Onboarding checklists</strong> — Your process, your requirements, your edge cases</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-number">17</div>
+    </div>
+
+    <!-- Slide 18: Level Two - Operational -->
+    <div class="slide" data-slide="18">
+      <div class="tier-label" style="color: var(--accent-blue); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; letter-spacing: 0.1em;">LEVEL TWO · OPERATIONAL</div>
+      <h2>Redesign the workflows</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>Step back from individual tools. Look at entire processes. Where are the handoffs? The bottlenecks? The error-prone manual steps?</p>
+          <p style="margin-top: 1rem;">Most workflows were designed around <span class="highlight-amber">system limitations</span>, not optimal outcomes. Those constraints are now removable.</p>
+        </div>
+        <div>
+          <ul class="point-list point-list-compact" style="margin-top: 0;">
+            <li><strong>Client onboarding</strong> — From weeks to days. Data flows, documents route, exceptions surface automatically.</li>
+            <li><strong>Regulatory reporting</strong> — Same data, fraction of the preparation time. Built for your specific requirements.</li>
+            <li><strong>Investment review process</strong> — Integrated analysis, automated compliance checks, streamlined approvals.</li>
+            <li><strong>Client communication</strong> — Personalised at scale, consistent in quality, efficient to produce.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-number">18</div>
+    </div>
+
+    <!-- Slide 19: Level Three - Strategic -->
+    <div class="slide" data-slide="19">
+      <div class="tier-label" style="color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; letter-spacing: 0.1em;">LEVEL THREE · STRATEGIC</div>
+      <h2>Create new capabilities</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>This is where competitive advantage emerges. Not doing the same things cheaper, but <span class="highlight-purple">doing things that weren't previously possible</span>.</p>
+          <p style="margin-top: 1rem;">What would you build if building wasn't the constraint?</p>
+        </div>
+        <div>
+          <ul class="point-list point-list-compact" style="margin-top: 0;">
+            <li><strong>Hyper-personalised client portals</strong> — Every client sees exactly what matters to them, updated in real-time</li>
+            <li><strong>Regulatory agility</strong> — Adapt to new requirements faster than competitors. Turn compliance from burden to advantage.</li>
+            <li><strong>Proprietary analytics</strong> — Your investment thesis, your data models, your edge—not a vendor's generic toolkit.</li>
+            <li><strong>Speed to market</strong> — Launch new products and services in weeks, not years.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-number">19</div>
+    </div>
+
+    <!-- Slide 20: Regulatory Advantage -->
+    <div class="slide" data-slide="20">
+      <h3>A counterintuitive insight</h3>
+      <h2>Regulation as advantage</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>Conventional wisdom: regulation is a burden. Compliance is a cost centre. The less time spent on it, the better.</p>
+          <p style="margin-top: 1rem;"><span class="highlight-purple">New reality:</span> Firms that can adapt to regulatory change faster gain market share. When requirements shift, you're selling while competitors are still implementing.</p>
+          <p style="margin-top: 1rem;">Bespoke tooling means regulatory changes become <span class="highlight-emerald">configuration updates, not projects</span>.</p>
+        </div>
+        <div class="card card-purple">
+          <h4>The Regulatory Speed Advantage</h4>
+          <div class="stat-row">
+            <span class="stat-label">Traditional adaptation</span>
+            <span class="stat-value">6-18 months</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">With bespoke tooling</span>
+            <span class="stat-value" style="color: var(--accent-purple);">Weeks</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Competitive window</span>
+            <span class="stat-value" style="color: var(--accent-emerald);">Significant</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">20</div>
+    </div>
+
+    <!-- Slide 21: Client Experience -->
+    <div class="slide" data-slide="21">
+      <h3>Where it matters most</h3>
+      <h2>The client experience gap</h2>
+      <p style="max-width: 900px;">Your clients use beautifully designed consumer apps every day. Then they log into your portal—built by a vendor serving hundreds of different firms—and the experience is... adequate.</p>
+      <div class="comparison-grid" style="margin-top: 2rem;">
+        <div class="card card-amber">
+          <h4>Generic Client Portal</h4>
+          <p style="font-size: 1rem; line-height: 1.6;">Same layout for every firm. Features you don't need. Missing features you do. Updated on the vendor's schedule. Your brand, their UX.</p>
+        </div>
+        <div class="card card-emerald">
+          <h4>Bespoke Client Experience</h4>
+          <p style="font-size: 1rem; line-height: 1.6;">Designed around your client relationships. Shows exactly what matters. Evolves with your service offering. Feels like you built it—because you did.</p>
+        </div>
+      </div>
+      <p style="margin-top: 2rem;"><span class="highlight">The differentiation opportunity:</span> Make every digital touchpoint feel as thoughtful as your in-person service.</p>
+      <div class="slide-number">21</div>
+    </div>
+
+    <!-- Slide 22: The Compounding Effect -->
+    <div class="slide slide-quote" data-slide="22">
+      <blockquote>"Iteration velocity is the new competitive moat"</blockquote>
+      <cite>Every improvement you make compounds. Every adaptation makes the next one faster. Your competitors are stuck waiting for vendor roadmaps.</cite>
+      <div class="slide-number">22</div>
+    </div>
+
+    <!-- Slide 23: Practical Roadmap -->
+    <div class="slide" data-slide="23">
+      <h3>Getting started</h3>
+      <h2>A practical roadmap</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-phase">Month 1-2</div>
+          <div class="timeline-title">Audit & Quick Wins</div>
+          <div class="timeline-desc">Identify the pain points everyone knows about. Build replacements for 2-3 internal tools. Demonstrate what's possible. Build internal capability.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Month 3-6</div>
+          <div class="timeline-title">Workflow Transformation</div>
+          <div class="timeline-desc">Select one end-to-end workflow for redesign. Onboarding, reporting, or client communication. Measure before and after. Document the improvement.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Month 6+</div>
+          <div class="timeline-title">Strategic Capability Building</div>
+          <div class="timeline-desc">With foundations in place, build toward unique capabilities. Client experience differentiation. Proprietary analytics. Regulatory agility.</div>
+        </div>
+      </div>
+      <div class="slide-number">23</div>
+    </div>
+
+    <!-- Slide 24: The Capability Question -->
+    <div class="slide" data-slide="24">
+      <h3>The real question</h3>
+      <h2>Who builds this capability?</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>This isn't about hiring developers. It's about having people who understand your business and can translate that understanding into working tools.</p>
+          <p style="margin-top: 1rem;">The most effective approach: <span class="highlight-emerald">pairing deep domain expertise with rapid development capability</span>—even temporarily—to build the first generation and establish the pattern.</p>
+        </div>
+        <div>
+          <ul class="point-list point-list-compact" style="margin-top: 0;">
+            <li><strong>Option 1:</strong> Upskill existing staff who know the business</li>
+            <li><strong>Option 2:</strong> Bring in capability to build alongside you</li>
+            <li><strong>Option 3:</strong> Hybrid approach—external expertise, internal ownership</li>
+          </ul>
+          <p style="margin-top: 1.5rem; font-size: 1.1rem;">The goal is always <span class="highlight">institutional capability</span>, not permanent dependency.</p>
+        </div>
+      </div>
+      <div class="slide-number">24</div>
+    </div>
+
+    <!-- ==================== END NEW SECTION ==================== -->
+
+    <!-- ==================== PART III: BUSINESS MODEL REPOSITIONING ==================== -->
+
+    <!-- Slide 25: Section Break - Business Models -->
+    <div class="slide slide-section" data-slide="25">
+      <div class="accent-line" style="background: var(--accent-purple);"></div>
+      <div class="section-number" style="color: var(--accent-purple);">PART III</div>
+      <h2>Repositioning the<br/>Business Model</h2>
+      <p class="subtitle" style="margin-top: 0.75rem;">When development cost collapses, how do you capture value?</p>
+      <div class="slide-number">25</div>
+    </div>
+
+    <!-- Slide 26: The Pricing Problem -->
+    <div class="slide" data-slide="26">
+      <h3>The fundamental challenge</h3>
+      <h2>You can't sell hours anymore</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>Traditional software services priced on effort: days of development, complexity of build, size of team.</p>
+          <p style="margin-top: 1rem;">When AI compresses a month of work into a day, that model falls apart. You either <span class="highlight-amber">lie about how long things take</span>, or you charge so little the business doesn't work.</p>
+        </div>
+        <div class="card card-emerald">
+          <h4>The Insight</h4>
+          <p style="font-size: 1rem; line-height: 1.6;">The value to the client hasn't decreased. A tool that saves 20 hours a week is worth the same whether it took a month or a day to build.</p>
+          <p style="font-size: 1rem; line-height: 1.6; margin-top: 1rem;"><span class="highlight-emerald">Decouple price from input. Tie it to output.</span></p>
+        </div>
+      </div>
+      <div class="slide-number">26</div>
+    </div>
+
+    <!-- Slide 27: What You're Actually Selling -->
+    <div class="slide" data-slide="27">
+      <h3>Reframe the offering</h3>
+      <h2>What you're actually selling</h2>
+      <div class="comparison-grid" style="margin-top: 2rem;">
+        <div class="card card-amber" style="opacity: 0.6;">
+          <h4>Not This</h4>
+          <ul class="point-list point-list-compact" style="margin-top: 0.5rem;">
+            <li>Days of development time</li>
+            <li>Lines of code</li>
+            <li>Technical complexity</li>
+            <li>Size of team</li>
+          </ul>
+        </div>
+        <div class="card card-emerald">
+          <h4>This Instead</h4>
+          <ul class="point-list point-list-compact" style="margin-top: 0.5rem;">
+            <li><strong>Business outcomes</strong> — cost saved, revenue generated, risk reduced</li>
+            <li><strong>Ongoing capability</strong> — access to rapid development as a service</li>
+            <li><strong>Managed solutions</strong> — working systems they don't think about</li>
+            <li><strong>Accelerated learning</strong> — capability transfer to their team</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-number">27</div>
+    </div>
+
+    <!-- Slide 28: Business Models Overview -->
+    <div class="slide" data-slide="28">
+      <h3>Commercial models that work</h3>
+      <h2>Six ways to capture value</h2>
+      <div class="three-column" style="margin-top: 1.5rem;">
+        <div class="tier-card" style="border-color: rgba(16, 185, 129, 0.3);">
+          <div class="tier-label" style="color: var(--accent-emerald);">Model 1</div>
+          <div class="tier-title">Value-Based Projects</div>
+          <div class="tier-description">Price on outcome, not effort. Quantify business impact. Charge accordingly.</div>
+          <div class="tier-examples">
+            <span>£15-50k per project</span>
+            <span>Tight scope boundaries</span>
+          </div>
+        </div>
+        <div class="tier-card" style="border-color: rgba(59, 130, 246, 0.3);">
+          <div class="tier-label" style="color: var(--accent-blue);">Model 2</div>
+          <div class="tier-title">Retained Capacity</div>
+          <div class="tier-description">Monthly retainer for continuous improvement. Selling access to capability.</div>
+          <div class="tier-examples">
+            <span>£3-8k/month</span>
+            <span>Ongoing relationship</span>
+          </div>
+        </div>
+        <div class="tier-card" style="border-color: rgba(168, 85, 247, 0.3);">
+          <div class="tier-label" style="color: var(--accent-purple);">Model 3</div>
+          <div class="tier-title">Managed Bespoke</div>
+          <div class="tier-description">Build, host, and run applications. Recurring revenue per system.</div>
+          <div class="tier-examples">
+            <span>£500-2k/month per app</span>
+            <span>High margin at scale</span>
+          </div>
+        </div>
+      </div>
+      <div class="three-column" style="margin-top: 1.25rem;">
+        <div class="tier-card" style="border-color: rgba(16, 185, 129, 0.3);">
+          <div class="tier-label" style="color: var(--accent-emerald);">Model 4</div>
+          <div class="tier-title">Outcome-Based</div>
+          <div class="tier-description">Tie compensation to measurable results. Share in documented savings.</div>
+          <div class="tier-examples">
+            <span>% of cost savings</span>
+            <span>Requires deep trust</span>
+          </div>
+        </div>
+        <div class="tier-card" style="border-color: rgba(59, 130, 246, 0.3);">
+          <div class="tier-label" style="color: var(--accent-blue);">Model 5</div>
+          <div class="tier-title">Productised-Bespoke</div>
+          <div class="tier-description">Core solution deployed with customisation. Leverage patterns across clients.</div>
+          <div class="tier-examples">
+            <span>Vertical specialisation</span>
+            <span>Scalable with expertise</span>
+          </div>
+        </div>
+        <div class="tier-card" style="border-color: rgba(168, 85, 247, 0.3);">
+          <div class="tier-label" style="color: var(--accent-purple);">Model 6</div>
+          <div class="tier-title">Capability Building</div>
+          <div class="tier-description">Build first wave, then train internal team. Accelerated self-sufficiency.</div>
+          <div class="tier-examples">
+            <span>£50-100k engagement</span>
+            <span>Advisory tail</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">28</div>
+    </div>
+
+    <!-- Slide 29: The Blended Model -->
+    <div class="slide" data-slide="29">
+      <h3>In practice</h3>
+      <h2>The blended client relationship</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p>A typical mid-sized client relationship combines multiple models over time:</p>
+          <div class="stack" style="margin-top: 1.5rem;">
+            <div class="stack-layer stack-layer-opportunity">
+              <span class="stack-label">Initial engagement — value-priced project</span>
+              <span class="stack-status stack-status-opportunity">£15-30k</span>
+            </div>
+            <div class="stack-layer stack-layer-opportunity">
+              <span class="stack-label">Ongoing development — monthly retainer</span>
+              <span class="stack-status stack-status-opportunity">£4-6k/mo</span>
+            </div>
+            <div class="stack-layer stack-layer-opportunity">
+              <span class="stack-label">Hosting & maintenance — per application</span>
+              <span class="stack-status stack-status-opportunity">£500-1k/mo</span>
+            </div>
+            <div class="stack-layer" style="border-left-color: var(--accent-blue);">
+              <span class="stack-label">Optional: capability building module</span>
+              <span class="stack-status" style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue);">£10-15k</span>
+            </div>
+          </div>
+        </div>
+        <div class="card card-purple">
+          <h4>Annual Client Value</h4>
+          <div class="stat-row">
+            <span class="stat-label">Initial project</span>
+            <span class="stat-value" style="color: var(--accent-emerald);">£20k</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Retainer (12 months)</span>
+            <span class="stat-value" style="color: var(--accent-emerald);">£60k</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Hosting (3 apps)</span>
+            <span class="stat-value" style="color: var(--accent-emerald);">£24k</span>
+          </div>
+          <div class="stat-row" style="border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 1rem;">
+            <span class="stat-label" style="color: var(--text-primary); font-weight: 500;">Year one total</span>
+            <span class="stat-value" style="color: var(--accent-purple); font-size: 1.5rem;">£104k</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-number">29</div>
+    </div>
+
+    <!-- Slide 30: Unit Economics -->
+    <div class="slide" data-slide="30">
+      <h3>The economics transform</h3>
+      <h2>When development cost collapses</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div class="card card-amber">
+          <h4>Traditional Agency Model</h4>
+          <div class="stat-row">
+            <span class="stat-label">Client pays</span>
+            <span class="stat-value">£100k</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Developer cost (60%)</span>
+            <span class="stat-value" style="color: var(--accent-amber);">-£60k</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Overhead (25%)</span>
+            <span class="stat-value" style="color: var(--accent-amber);">-£25k</span>
+          </div>
+          <div class="stat-row" style="border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 0.75rem;">
+            <span class="stat-label">Margin</span>
+            <span class="stat-value" style="color: var(--text-muted);">£15k (15%)</span>
+          </div>
+        </div>
+        <div class="card card-emerald">
+          <h4>AI-Assisted Model</h4>
+          <div class="stat-row">
+            <span class="stat-label">Client pays</span>
+            <span class="stat-value">£100k</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">AI + expert time (15%)</span>
+            <span class="stat-value" style="color: var(--accent-emerald);">-£15k</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Overhead (15%)</span>
+            <span class="stat-value" style="color: var(--accent-emerald);">-£15k</span>
+          </div>
+          <div class="stat-row" style="border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 0.75rem;">
+            <span class="stat-label">Margin</span>
+            <span class="stat-value" style="color: var(--accent-emerald); font-size: 1.25rem;">£70k (70%)</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 2rem;">The question isn't whether margins improve. It's <span class="highlight">who captures the efficiency gain</span>—you, or your clients through price competition.</p>
+      <div class="slide-number">30</div>
+    </div>
+
+    <!-- Slide 31: Positioning Quote -->
+    <div class="slide slide-quote" data-slide="31">
+      <blockquote>"Price on value, deliver with AI, keep the difference"</blockquote>
+      <cite>The firms that thrive will decouple price from effort. The firms that struggle will still be trying to sell hours when hours no longer mean anything.</cite>
+      <div class="slide-number">31</div>
+    </div>
+
+    <!-- Slide 32: Who Wins -->
+    <div class="slide" data-slide="32">
+      <h3>Market positioning</h3>
+      <h2>Who wins in this transition</h2>
+      <div class="two-column" style="margin-top: 2rem;">
+        <div>
+          <p style="color: var(--accent-amber); font-weight: 500; margin-bottom: 1rem;">Vulnerable positions:</p>
+          <ul class="point-list point-list-compact" style="margin-top: 0;">
+            <li>Body shops selling developer hours</li>
+            <li>Large consultancies with high overhead</li>
+            <li>Offshore teams competing on cost alone</li>
+            <li>Generalists without domain expertise</li>
+          </ul>
+        </div>
+        <div>
+          <p style="color: var(--accent-emerald); font-weight: 500; margin-bottom: 1rem;">Strong positions:</p>
+          <ul class="point-list point-list-compact" style="margin-top: 0;">
+            <li>Deep vertical expertise + rapid delivery</li>
+            <li>Outcome-based pricing models</li>
+            <li>Managed services with recurring revenue</li>
+            <li>Trusted advisors who can build, not just advise</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top: 2rem;"><span class="highlight">The rare combination:</span> Someone who understands the domain deeply, can translate that into working software rapidly, and prices on value rather than effort.</p>
+      <div class="slide-number">32</div>
+    </div>
+
+    <!-- ==================== END PART III ==================== -->
+
+    <!-- Slide 33: What This Means (updated) -->
+    <div class="slide" data-slide="33">
+      <h3>The path forward</h3>
+      <h2>What this means for you</h2>
+      <ul class="point-list">
+        <li><strong>Audit your stack with new eyes</strong> — Not "can we save money?" but "what constraints have we accepted as permanent?"</li>
+        <li><strong>Identify your 60% fit pain</strong> — Where have you shaped your business around software limitations?</li>
+        <li><strong>Start small, learn fast</strong> — One internal tool. One workflow. Prove the concept.</li>
+        <li><strong>Think strategically</strong> — Cost reduction is a side effect. What capabilities would change the game?</li>
+        <li><strong>Build institutional capability</strong> — The ability to rapidly create tailored tools is now strategic infrastructure.</li>
+      </ul>
+      <div class="slide-number">33</div>
+    </div>
+
+    <!-- Slide 34: Close -->
+    <div class="slide slide-title" data-slide="34">
+      <div class="accent-line"></div>
+      <h1>Questions?</h1>
+      <p class="subtitle">The economics have shifted. The question is how quickly you adapt—and whether you lead or follow.</p>
+      <div class="slide-number">34</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <button id="prevBtn" aria-label="Previous slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button id="nextBtn" aria-label="Next slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('progress');
+
+    function updateSlide() {
+      slides.forEach(slide => slide.classList.remove('active'));
+      document.querySelector(`[data-slide="${currentSlide}"]`).classList.add('active');
+      
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+      
+      progress.style.width = `${(currentSlide / totalSlides) * 100}%`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    // Touch support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    });
+    document.addEventListener('touchend', (e) => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
