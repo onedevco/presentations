@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traction - Pitch Deck</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #028090;
+      --primary-light: #00A896;
+      --accent: #02C39A;
+      --dark: #1A1A2E;
+      --dark-muted: #2D2D44;
+      --white: #FFFFFF;
+      --off-white: #F8FAFA;
+      --gray: #6B7280;
+      --gray-light: #E5E7EB;
+      --text: #1F2937;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .presentation {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      padding: 60px 80px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+    }
+
+    .slide.light {
+      background: var(--off-white);
+    }
+
+    .slide.dark {
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 12px 24px;
+      border-radius: 50px;
+      z-index: 1000;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .nav button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .nav button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .nav .counter {
+      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+      z-index: 1000;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .slide.dark h2 {
+      color: var(--white);
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--gray);
+    }
+
+    .slide.dark p {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .subtitle {
+      font-size: 22px;
+      color: var(--primary-light);
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .card-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .card.accent-left {
+      border-left: 4px solid var(--primary);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(2, 128, 144, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .card-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+
+    .card h3 {
+      color: var(--text);
+    }
+
+    .card p {
+      font-size: 14px;
+    }
+
+    /* Pillars */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .pillar-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(2, 128, 144, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .pillar-icon svg {
+      width: 36px;
+      height: 36px;
+      color: var(--primary);
+    }
+
+    /* Callout */
+    .callout {
+      background: var(--primary);
+      color: white;
+      padding: 20px 28px;
+      border-radius: 12px;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .callout.white {
+      background: var(--white);
+      color: var(--text);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .callout-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .callout.white .callout-icon {
+      background: rgba(2, 128, 144, 0.1);
+    }
+
+    .callout-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 40px 120px 1fr 100px;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 0;
+      border-radius: 12px;
+    }
+
+    .step.highlight {
+      background: rgba(2, 128, 144, 0.08);
+      padding: 16px 20px;
+      margin: 0 -20px;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      background: var(--gray-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .step.highlight .step-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .step-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    .step-time {
+      font-size: 12px;
+      color: var(--primary);
+      background: rgba(2, 128, 144, 0.1);
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .pricing-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      background: var(--primary);
+      color: white;
+    }
+
+    .pricing-card.featured p {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    .pricing-name {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-price {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .pricing-card.featured .pricing-price {
+      color: white;
+    }
+
+    .pricing-features {
+      list-style: none;
+    }
+
+    .pricing-features li {
+      font-size: 14px;
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gray);
+    }
+
+    .pricing-card.featured .pricing-features li {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .pricing-features li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      margin-top: 24px;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .comparison-table thead th {
+      background: var(--dark);
+      color: white;
+      font-weight: 600;
+    }
+
+    .comparison-table thead th:last-child {
+      background: var(--primary);
+    }
+
+    .comparison-table thead th:first-child {
+      text-align: left;
+      border-radius: 8px 0 0 0;
+    }
+
+    .comparison-table thead th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .comparison-table tbody tr:nth-child(odd) {
+      background: var(--white);
+    }
+
+    .comparison-table tbody tr:nth-child(even) {
+      background: var(--off-white);
+    }
+
+    .comparison-table tbody td:first-child {
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .comparison-table tbody td:last-child {
+      background: rgba(2, 128, 144, 0.08);
+    }
+
+    .check {
+      color: var(--gray);
+    }
+
+    .check.highlight {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .cross {
+      color: var(--gray-light);
+    }
+
+    /* Two Column */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+      flex: 1;
+    }
+
+    .col-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .col-card.dark {
+      background: var(--dark);
+      color: white;
+    }
+
+    .col-card h3 {
+      margin-bottom: 20px;
+    }
+
+    .col-card.dark h3 {
+      color: white;
+    }
+
+    .col-card ul {
+      list-style: none;
+    }
+
+    .col-card ul li {
+      padding: 10px 0;
+      padding-left: 28px;
+      position: relative;
+      font-size: 15px;
+      color: var(--gray);
+    }
+
+    .col-card.dark ul li {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .col-card ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    .stat {
+      margin-bottom: 24px;
+    }
+
+    .stat-num {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Timeline */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 80px;
+      right: 80px;
+      height: 4px;
+      background: var(--gray-light);
+    }
+
+    .timeline-item {
+      text-align: center;
+    }
+
+    .timeline-dot {
+      width: 20px;
+      height: 20px;
+      background: var(--gray-light);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-item.current .timeline-dot {
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(2, 128, 144, 0.2);
+    }
+
+    .timeline-date {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .timeline-item.current .timeline-date {
+      color: var(--primary);
+    }
+
+    .timeline-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+
+    .timeline-item.current .timeline-card {
+      border-left: 4px solid var(--primary);
+    }
+
+    .timeline-card h4 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .timeline-card ul {
+      list-style: none;
+    }
+
+    .timeline-card ul li {
+      font-size: 13px;
+      color: var(--gray);
+      padding: 6px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .timeline-card ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    /* CTA Slide */
+    .cta-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .cta-logo {
+      width: 80px;
+      height: 80px;
+      background: var(--primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .cta-logo svg {
+      width: 48px;
+      height: 48px;
+      color: white;
+    }
+
+    .cta-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .cta-tagline {
+      font-size: 24px;
+      color: var(--primary-light);
+      margin-bottom: 40px;
+    }
+
+    .cta-button {
+      background: var(--primary);
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 16px 40px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(2, 128, 144, 0.4);
+    }
+
+    .cta-contact {
+      margin-top: 40px;
+      color: var(--gray);
+      font-size: 16px;
+    }
+
+    /* Accent bar */
+    .accent-bar {
+      width: 100px;
+      height: 4px;
+      background: var(--primary);
+      margin-top: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .slide {
+        padding: 40px 60px;
+      }
+      h1 {
+        font-size: 40px;
+      }
+      h2 {
+        font-size: 32px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .card-grid,
+      .pillars,
+      .pricing-grid,
+      .timeline {
+        grid-template-columns: 1fr;
+      }
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      .step {
+        grid-template-columns: 40px 1fr;
+      }
+      .step-desc,
+      .step-time {
+        display: none;
+      }
+    }
+
+    /* SVG Icons inline */
+    .icon-chart {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="presentation" id="presentation">
+
+    <!-- Slide 1: Title -->
+    <section class="slide dark active" data-slide="1">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" class="icon-chart"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        </div>
+        <span class="logo-text">Traction</span>
+      </div>
+
+      <h1>Stop guessing.<br>Start growing.</h1>
+      <p class="subtitle">AI-powered marketing guidance for SaaS teams</p>
+      <div class="accent-bar"></div>
+
+      <p style="margin-top: auto; font-size: 14px; opacity: 0.5;">Pitch Deck • January 2026</p>
+    </section>
+
+    <!-- Slide 2: The Problem -->
+    <section class="slide light" data-slide="2">
+      <h2>The Problem</h2>
+
+      <div class="card-grid">
+        <div class="card accent-left">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <h3>Small SaaS teams</h3>
+          <p>2-10 people building great products but with no marketing expertise</p>
+        </div>
+
+        <div class="card accent-left">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <h3>No marketing expertise</h3>
+          <p>Engineers who never learned marketing, overwhelmed by options</p>
+        </div>
+
+        <div class="card accent-left">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          </div>
+          <h3>No feedback loop</h3>
+          <p>Can't tell what's working, so they keep guessing and wasting effort</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 40px;">
+        <p style="color: white; font-style: italic; font-size: 16px;">72% of startups fail due to premature scaling — often driven by ineffective marketing</p>
+      </div>
+    </section>
+
+    <!-- Slide 3: The Solution -->
+    <section class="slide light" data-slide="3">
+      <h2>The Solution</h2>
+      <p style="max-width: 700px;">Traction is your AI marketing co-pilot that learns what works for your specific product and audience.</p>
+
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </div>
+          <h3>Strategy</h3>
+          <p style="font-size: 14px;">AI builds your positioning, messaging, and channel strategy</p>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          </div>
+          <h3>Creation</h3>
+          <p style="font-size: 14px;">Generate content that sounds like you, optimised for each channel</p>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+          </div>
+          <h3>Learning</h3>
+          <p style="font-size: 14px;">Feedback loop that identifies what's working and adapts</p>
+        </div>
+      </div>
+
+      <div class="callout white" style="margin-top: auto;">
+        <div class="callout-icon">
+          <svg viewBox="0 0 24 24" class="icon-chart" style="color: var(--primary);"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+        </div>
+        <p style="color: var(--text);"><strong>Key differentiator:</strong> Most tools help you DO marketing. Traction helps you LEARN what works.</p>
+      </div>
+    </section>
+
+    <!-- Slide 4: How It Works -->
+    <section class="slide light" data-slide="4">
+      <h2>How It Works</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-title">Onboard</div>
+          <div class="step-desc">Tell us about your product, customers, and what you've tried</div>
+          <div class="step-time">10 min</div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-title">Get your path</div>
+          <div class="step-desc">AI creates personalised action queue based on your stage</div>
+          <div class="step-time">Instant</div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Execute</div>
+          <div class="step-desc">Follow guided steps, create content with AI assistance</div>
+          <div class="step-time">Ongoing</div>
+        </div>
+
+        <div class="step highlight">
+          <div class="step-num">4</div>
+          <div class="step-title">Check in</div>
+          <div class="step-desc">Report what happened, AI finds patterns in your data</div>
+          <div class="step-time">Weekly</div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-title">Adapt</div>
+          <div class="step-desc">Recommendations evolve based on what's working for you</div>
+          <div class="step-time">Continuous</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: Core Features -->
+    <section class="slide light" data-slide="5">
+      <h2>Core Features</h2>
+
+      <div class="card-grid-2">
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </div>
+          <h3>Smart Onboarding</h3>
+          <p>AI assessment builds your marketing foundation: positioning, ICP, messaging, channel strategy</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          </div>
+          <h3>Action Queue</h3>
+          <p>Prioritised next steps with time estimates. Always know what to focus on.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          </div>
+          <h3>Content Studio</h3>
+          <p>Generate posts, emails, ads, and landing pages. AI learns your voice over time.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" class="icon-chart"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <h3>Feedback Loop</h3>
+          <p>Weekly check-ins reveal what's working. AI adapts recommendations to your data.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Target Market -->
+    <section class="slide light" data-slide="6">
+      <h2>Target Market</h2>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h3>Primary Audience</h3>
+          <ul>
+            <li>Small SaaS startup teams (2-10 people)</li>
+            <li>Technical founders without marketing background</li>
+            <li>Post-launch, seeking product-market fit</li>
+            <li>Have tried marketing but can't measure results</li>
+          </ul>
+        </div>
+
+        <div class="col-card dark">
+          <h3>Market Opportunity</h3>
+          <div class="stat">
+            <div class="stat-num">30M+</div>
+            <div class="stat-label">small businesses globally</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">500K+</div>
+            <div class="stat-label">new SaaS products launched yearly</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">$15B</div>
+            <div class="stat-label">marketing automation market</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: Business Model -->
+    <section class="slide light" data-slide="7">
+      <h2>Business Model</h2>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-name">Starter</div>
+          <div class="pricing-price">Free</div>
+          <ul class="pricing-features">
+            <li>Onboarding assessment</li>
+            <li>Basic action queue</li>
+            <li>1 content piece/week</li>
+          </ul>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-badge">POPULAR</div>
+          <div class="pricing-name">Growth</div>
+          <div class="pricing-price">£29/mo</div>
+          <ul class="pricing-features">
+            <li>Unlimited content creation</li>
+            <li>Weekly check-ins & insights</li>
+            <li>Full channel guides</li>
+            <li>Email support</li>
+          </ul>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-name">Scale</div>
+          <div class="pricing-price">£79/mo</div>
+          <ul class="pricing-features">
+            <li>Everything in Growth</li>
+            <li>Priority AI processing</li>
+            <li>Team features (coming)</li>
+            <li>Slack integration</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Competitive Landscape -->
+    <section class="slide light" data-slide="8">
+      <h2>Why Traction Wins</h2>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Generic AI<br>(ChatGPT)</th>
+            <th>Marketing Tools<br>(HubSpot, etc)</th>
+            <th>Courses &<br>Coaches</th>
+            <th>Traction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Personalised strategy</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="check">✓</td>
+            <td class="check highlight">✓</td>
+          </tr>
+          <tr>
+            <td>Content creation</td>
+            <td class="check">✓</td>
+            <td class="check">✓</td>
+            <td class="cross">✗</td>
+            <td class="check highlight">✓</td>
+          </tr>
+          <tr>
+            <td>Step-by-step guidance</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="check">✓</td>
+            <td class="check highlight">✓</td>
+          </tr>
+          <tr>
+            <td>Learns what works for YOU</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="check highlight">✓</td>
+          </tr>
+          <tr>
+            <td>Affordable for startups</td>
+            <td class="check">✓</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="check highlight">✓</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout white" style="margin-top: auto;">
+        <p style="color: var(--text); font-style: italic;">Only Traction combines AI content creation with a learning system that improves over time</p>
+      </div>
+    </section>
+
+    <!-- Slide 9: Roadmap -->
+    <section class="slide light" data-slide="9">
+      <h2>Roadmap</h2>
+
+      <div class="timeline">
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Q1 2026</div>
+          <div class="timeline-card">
+            <h4>Phase 1: Launch MVP</h4>
+            <ul>
+              <li>Core onboarding flow</li>
+              <li>Content creation</li>
+              <li>Basic feedback loop</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Q2 2026</div>
+          <div class="timeline-card">
+            <h4>Phase 2: Intelligence</h4>
+            <ul>
+              <li>Advanced analytics</li>
+              <li>Pattern recognition</li>
+              <li>A/B recommendations</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">Q3 2026</div>
+          <div class="timeline-card">
+            <h4>Phase 3: Scale</h4>
+            <ul>
+              <li>Team collaboration</li>
+              <li>Integrations (Slack, analytics)</li>
+              <li>API access</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: CTA -->
+    <section class="slide dark" data-slide="10">
+      <div class="cta-content">
+        <div class="cta-logo">
+          <svg viewBox="0 0 24 24" class="icon-chart"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        </div>
+        <div class="cta-title">Traction</div>
+        <div class="cta-tagline">Marketing that learns with you.</div>
+        <button class="cta-button">Get Early Access</button>
+        <div class="cta-contact">Nigel Watson • nigelwatson@me.com</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <button id="prevBtn" onclick="changeSlide(-1)">←</button>
+    <span class="counter"><span id="currentSlide">1</span> / <span id="totalSlides">10</span></span>
+    <button id="nextBtn" onclick="changeSlide(1)">→</button>
+  </nav>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = document.querySelectorAll('.slide').length;
+
+    document.getElementById('totalSlides').textContent = totalSlides;
+
+    function showSlide(n) {
+      const slides = document.querySelectorAll('.slide');
+
+      if (n > totalSlides) currentSlide = 1;
+      if (n < 1) currentSlide = totalSlides;
+
+      slides.forEach(slide => {
+        slide.classList.remove('active');
+      });
+
+      slides[currentSlide - 1].classList.add('active');
+
+      document.getElementById('currentSlide').textContent = currentSlide;
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+
+      // Update progress bar
+      const progress = (currentSlide / totalSlides) * 100;
+      document.getElementById('progress').style.width = progress + '%';
+    }
+
+    function changeSlide(n) {
+      currentSlide += n;
+      showSlide(currentSlide);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+      }
+    });
+
+    // Touch navigation for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) {
+        changeSlide(1);
+      } else if (touchEndX - touchStartX > 50) {
+        changeSlide(-1);
+      }
+    });
+
+    // Initialize
+    showSlide(currentSlide);
+  </script>
+</body>
+</html>
